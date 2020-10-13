@@ -18,10 +18,11 @@ package-lock.json
 /public/storage
 /public/themes
 /public/vendor
-/resources/themes/velocity/*
-/resources/lang/vendor/admin/*
-/resources/lang/vendor/shop/*
-/resources/lang/vendor/velocity/*
+/public/installer
+# /resources/themes/velocity/*
+# /resources/lang/vendor/admin/*
+# /resources/lang/vendor/shop/*
+# /resources/lang/vendor/velocity/*
 /storage/*.key
 /storage/dcc-data/
 /vendor
