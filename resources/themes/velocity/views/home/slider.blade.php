@@ -41,7 +41,7 @@
                         <img
                             loading="lazy"
                             class="col-12 no-padding banner-icon"
-                            src="{{ asset('/themes/velocity/assets/images/banner1.png') }}" />
+                            src="{{ asset('/themes/velocity/assets/images/banner.png') }}" />
                     </slide>
                 @endif
 

@@ -1,20 +1,22 @@
 @push('scripts')
     <script type="text/x-template" id="cart-btn-template">
-        <button
+        <!-- <button
             type="button"
             id="mini-cart"
             @click="toggleMiniCart"
             :class="`btn btn-link disable-box-shadow ${itemCount == 0 ? 'cursor-not-allowed' : ''}`">
 
-            <div class="mini-cart-content">
-                <i class="material-icons-outlined text-down-3">shopping_cart</i>
-                <span class="badge" v-text="itemCount" v-if="itemCount != 0"></span>
-                <span class="fs18 fw6 cart-text">{{ __('velocity::app.minicart.cart') }}</span>
-            </div>
+          
             <div class="down-arrow-container">
                 <span class="rango-arrow-down"></span>
-            </div>
-        </button>
+            </div> -->
+            <a  alt="Shopping Cart" class="mini-cart" id="mini-cart"  @click="toggleMiniCart">
+                       
+                        <span class="mini-cart__cart-count" v-text="itemCount" v-if="itemCount != 0"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" class="injected-svg svg-icon mini-cart__icon" data-src="https://camposcoffee.com/wp-content/themes/campos-codeshare/assets/images/icons/cart.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M15.867 15.713a.836.836 0 1 0 .835.835.836.836 0 0 0-.835-.835m0 2.616c-.982 0-1.782-.799-1.782-1.781 0-.983.8-1.783 1.782-1.783.983 0 1.782.8 1.782 1.783 0 .982-.8 1.781-1.782 1.781M17.206 13.44H7.066M7.08 13.914h10.126a.474.474 0 0 0 0-.948H7.428L4.166.825A.473.473 0 0 0 3.71.474H.474a.474.474 0 0 0 0 .947h2.872l3.26 12.133a.473.473 0 0 0 .474.36z"></path><path d="M6.712 10.295h11.113l1.706-6.303H5.016l1.696 6.303zm11.475.947H6.349a.474.474 0 0 1-.458-.35L3.941 3.64a.475.475 0 0 1 .457-.597H20.15a.474.474 0 0 1 .457.597l-1.963 7.251a.474.474 0 0 1-.457.35zM8.998 15.713a.836.836 0 1 0 .835.835.836.836 0 0 0-.835-.835m0 2.616c-.983 0-1.782-.799-1.782-1.781 0-.983.8-1.783 1.782-1.783.983 0 1.782.8 1.782 1.783 0 .982-.8 1.781-1.782 1.781M10.828 10.461L8.68 3.698"></path><path d="M10.828 10.935a.474.474 0 0 1-.451-.33L8.227 3.84a.473.473 0 1 1 .904-.286l2.149 6.763a.474.474 0 0 1-.452.617M16.234 10.461l-2.149-6.763M16.234 10.935a.474.474 0 0 1-.452-.33L13.633 3.84a.473.473 0 1 1 .903-.286l2.15 6.763a.474.474 0 0 1-.452.617"></path></svg>
+            </a>
+        <!-- </button> -->
+        
     </script>
 
     <script type="text/x-template" id="close-btn-template">
@@ -43,68 +45,97 @@
     </script>
 @endpush
 
-@include('velocity::UI.header')
+<!-- @include('velocity::UI.header') -->
 
 @push('scripts')
     <script type="text/x-template" id="logo-template">
-        <a
-            :class="`left ${addClass}`"
-            href="{{ route('shop.home.index') }}">
+        <div class="header__logo-container">
+            <a
+                :class="`header__logo-container__link`"
+                href="{{ route('shop.home.index') }}">
 
-            @if ($logo = core()->getCurrentChannel()->logo_url)
-                <img class="logo" src="{{ $logo }}" />
-            @else
-                <img class="logo" src="{{ asset('themes/velocity/assets/images/logo-text.png') }}" />
-            @endif
-        </a>
+                @if ($logo = core()->getCurrentChannel()->logo_url)
+                    <img class="logo" src="{{ $logo }}" width="48" />
+                @else
+                    <img class="logo" src="{{ asset('themes/velocity/assets/images/logo-text.png') }}" />
+                @endif
+            </a>
+        </div>
     </script>
 
     <script type="text/x-template" id="searchbar-template">
         <div class="row no-margin right searchbar">
-            
-           
+            <div class="col-lg-5 col-md-12 no-padding input-group">
+                
+                <!-- <form
+                    method="GET"
+                    role="search"
+                    id="search-form"
+                    action="{{ route('velocity.search.index') }}">
 
-            <div class="col-lg-7 col-md-12">
+                    <div
+                        class="btn-toolbar full-width"
+                        role="toolbar">
+
+                        <div class="btn-group full-width">
+                            <div class="selectdiv">
+                                <select class="form-control fs13 styled-select" name="category" @change="focusInput($event)">
+                                    <option value="">
+                                        {{ __('velocity::app.header.all-categories') }}
+                                    </option>
+
+                                    <template v-for="(category, index) in $root.sharedRootCategories">
+                                        <option
+                                            :key="index"
+                                            selected="selected"
+                                            :value="category.id"
+                                            v-if="(category.id == searchedQuery.category)">
+                                            @{{ category.name }}
+                                        </option>
+
+                                        <option :key="index" :value="category.id" v-else>
+                                            @{{ category.name }}
+                                        </option>
+                                    </template>
+                                </select>
+
+                                <div class="select-icon-container">
+                                    <span class="select-icon rango-arrow-down"></span>
+                                </div>
+                            </div>
+
+                            <div class="full-width">
+
+                                <input
+                                    required
+                                    name="term"
+                                    type="search"
+                                    class="form-control"
+                                    placeholder="{{ __('velocity::app.header.search-text') }}"
+                                    :value="searchedQuery.term ? decodeURIComponent(searchedQuery.term.split('+').join(' ')) : ''" />
+
+                                <image-search-component></image-search-component>
+
+                                <button class="btn" type="submit" id="header-search-icon">
+                                    <i class="fs16 fw6 rango-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form> -->
+            </div>
+
+            <!-- <div class="col-lg-7 col-md-12">
                 {!! view_render_event('bagisto.shop.layout.header.cart-item.before') !!}
                     @include('shop::checkout.cart.mini-cart')
                 {!! view_render_event('bagisto.shop.layout.header.cart-item.after') !!}
 
-                @php
-                    $showCompare = core()->getConfigData('general.content.shop.compare_option') == "1" ? true : false
-                @endphp
+              
+                
 
-                {!! view_render_event('bagisto.shop.layout.header.compare.before') !!}
-                    @if ($showCompare)
-                        <a
-                            class="compare-btn unset"
-                            @auth('customer')
-                                href="{{ route('velocity.customer.product.compare') }}"
-                            @endauth
-
-                            @guest('customer')
-                                href="{{ route('velocity.product.compare') }}"
-                            @endguest
-                            >
-
-                            <i class="material-icons">compare_arrows</i>
-                            <div class="badge-container" v-if="compareCount > 0">
-                                <span class="badge" v-text="compareCount"></span>
-                            </div>
-                            <span>{{ __('velocity::app.customer.compare.text') }}</span>
-                        </a>
-                    @endif
-                {!! view_render_event('bagisto.shop.layout.header.compare.after') !!}
-
-                {!! view_render_event('bagisto.shop.layout.header.wishlist.before') !!}
-                    <a class="wishlist-btn unset" :href="`${isCustomer ? '{{ route('customer.wishlist.index') }}' : '{{ route('velocity.product.guest-wishlist') }}'}`">
-                        <i class="material-icons">favorite_border</i>
-                        <div class="badge-container" v-if="wishlistCount > 0">
-                            <span class="badge" v-text="wishlistCount"></span>
-                        </div>
-                        <span>{{ __('shop::app.layouts.wishlist') }}</span>
-                    </a>
-                {!! view_render_event('bagisto.shop.layout.header.wishlist.after') !!}
-            </div>
+                
+            </div> -->
         </div>
     </script>
 

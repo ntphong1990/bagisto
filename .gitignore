@@ -18,7 +18,6 @@ package-lock.json
 /public/storage
 /public/themes
 /public/vendor
-/public/installer
 # /resources/themes/velocity/*
 # /resources/lang/vendor/admin/*
 # /resources/lang/vendor/shop/*
@@ -28,3 +27,4 @@ package-lock.json
 /vendor
 yarn.lock
 yarn-error.log
+public/installer/*
