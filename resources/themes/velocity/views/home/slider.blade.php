@@ -16,7 +16,7 @@
                 slides-per-page="1"
                 navigation-enabled="hide"
                 locale-direction="direction"
-                :slides-count="{{ ! empty($sliderData) ? sizeof($sliderData) : 1 }}">
+                :slides-count="{{  1 }}">
 
                 @if (! empty($sliderData))
                     @foreach ($sliderData as $index => $slider)
@@ -49,7 +49,7 @@
             
             <div class="carousel-caption" style="top:0px">
             <img src="/uploads/movin sport final-05.png" style="width:70vw"/>
-          <h1 style="font-size: 6.5rem;">COMING SOON</h1>
+          <h1 class="display-4">COMING SOON</h1>
           
         </div>
         </div>

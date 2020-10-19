@@ -327,7 +327,7 @@
                     @endphp
 
                     <div class="right-vc-header col-6">
-                        @if ($showCompare)
+                        <!-- @if ($showCompare)
                             <a
                                 class="compare-btn unset"
                                 @auth('customer')
@@ -355,7 +355,7 @@
 
                         <a class="unset cursor-pointer" @click="openSearchBar">
                             <i class="material-icons">search</i>
-                        </a>
+                        </a> -->
 
                         <a href="{{ route('shop.checkout.cart.index') }}" class="unset">
                             <div class="badge-wrapper">
