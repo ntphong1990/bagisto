@@ -46,6 +46,12 @@
                 @endif
 
             </carousel-component>
+            
+            <div class="carousel-caption" style="top:0px">
+            <img src="/uploads/movin sport final-05.png" style="width:70vw"/>
+          <h1 style="font-size: 6.5rem;">COMING SOON</h1>
+          
+        </div>
         </div>
     </script>
 
