@@ -16,7 +16,7 @@
                 slides-per-page="1"
                 navigation-enabled="hide"
                 locale-direction="direction"
-                :slides-count="{{  1 }}">
+                :slides-count="{{ ! empty($sliderData) ? sizeof($sliderData) : 1 }}">
 
                 @if (! empty($sliderData))
                     @foreach ($sliderData as $index => $slider)
@@ -26,9 +26,11 @@
                     @endphp
                         <slide slot="slide-{{ $index }}">
                             <a @if($slider['slider_path']) href="{{ $slider['slider_path'] }}" @endif>
-                                <img
-                                    class="col-12 no-padding banner-icon"
-                                    src="{{ url()->to('/') . '/uploads/' . $slider['path'] }}" />
+                                <div style="width:100vw;height:100vh">
+                                    <img
+                                        style="display: block;height: 90vh;width: auto;min-width:100vw;"
+                                        src="{{ url()->to('/') . '/uploads/' . $slider['path'] }}" />
+                                </div>    
 
                                 <div class="show-content" v-html="'{{ $textContent }}'">
                                 </div>
@@ -46,7 +48,7 @@
                 @endif
 
             </carousel-component>
-            
+           
             <div class="carousel-caption" style="top:0px">
             <img src="/uploads/movin sport final-05.png" style="width:70vw"/>
           <h1 class="display-4">COMING SOON</h1>
