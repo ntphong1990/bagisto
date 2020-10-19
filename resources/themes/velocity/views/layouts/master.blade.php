@@ -44,7 +44,23 @@
             {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
         </style>
     </head>
-
+    <!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '624914138202544');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=624914138202544&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code -->
     <body @if (core()->getCurrentLocale()->direction == 'rtl') class="rtl" @endif>
         {!! view_render_event('bagisto.shop.layout.body.before') !!}
 
@@ -58,7 +74,7 @@
             <div class="main-container-wrapper">
 
                 @section('body-header')
-                    @include('shop::layouts.top-nav.index')
+                    <!-- @include('shop::layouts.top-nav.index') -->
 
                     {!! view_render_event('bagisto.shop.layout.header.before') !!}
 
@@ -123,13 +139,13 @@
         </div>
 
         <!-- below footer -->
-        @section('footer')
+        <!-- @section('footer')
             {!! view_render_event('bagisto.shop.layout.footer.before') !!}
 
                 @include('shop::layouts.footer.index')
 
             {!! view_render_event('bagisto.shop.layout.footer.after') !!}
-        @show
+        @show -->
 
         {!! view_render_event('bagisto.shop.layout.body.after') !!}
 
