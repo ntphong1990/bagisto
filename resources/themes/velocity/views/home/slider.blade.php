@@ -28,7 +28,7 @@
                             <a @if($slider['slider_path']) href="{{ $slider['slider_path'] }}" @endif>
                                 <div style="width:100vw;height:100vh">
                                     <img
-                                        style="display: block;height: 90vh;width: auto;min-width:100vw;"
+                                        style="display: block;height: 90vh;min-height:75vw;width: auto;min-width:100vw;"
                                         src="{{ url()->to('/') . '/uploads/' . $slider['path'] }}" />
                                 </div>    
 
