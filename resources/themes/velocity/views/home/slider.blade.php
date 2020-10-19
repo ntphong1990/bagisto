@@ -49,7 +49,7 @@
 
             </carousel-component>
            
-            <div class="carousel-caption" style="top:0px">
+            <div class="carousel-caption" style="top:200px">
             <img src="/uploads/movin sport final-05.png" style="width:70vw"/>
           <h1 class="display-4">COMING SOON</h1>
           
