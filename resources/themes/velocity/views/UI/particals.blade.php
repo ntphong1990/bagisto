@@ -9,7 +9,7 @@
             <div class="mini-cart-content">
                 <i class="material-icons-outlined text-down-3">shopping_cart</i>
                 <span class="badge" v-text="itemCount" v-if="itemCount != 0"></span>
-                <span class="fs18 fw6 cart-text">{{ __('velocity::app.minicart.cart') }}</span>
+                <!-- <span class="fs18 fw6 cart-text">{{ __('velocity::app.minicart.cart') }}</span> -->
             </div>
             <div class="down-arrow-container">
                 <span class="rango-arrow-down"></span>
@@ -126,7 +126,7 @@
                     @include('shop::checkout.cart.mini-cart')
                 {!! view_render_event('bagisto.shop.layout.header.cart-item.after') !!}
 
-                @php
+                <!-- @php
                     $showCompare = core()->getConfigData('general.content.shop.compare_option') == "1" ? true : false
                 @endphp
 
@@ -160,7 +160,7 @@
                         </div>
                         <span>{{ __('shop::app.layouts.wishlist') }}</span>
                     </a>
-                {!! view_render_event('bagisto.shop.layout.header.wishlist.after') !!}
+                {!! view_render_event('bagisto.shop.layout.header.wishlist.after') !!} -->
             </div>
         </div>
     </script>
