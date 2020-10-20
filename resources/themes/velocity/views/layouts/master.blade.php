@@ -44,7 +44,7 @@
             {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
         </style>
     </head>
-    <!-- Facebook Pixel Code -->
+ <!-- Facebook Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -54,11 +54,11 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '624914138202544');
+fbq('init', '1238291919574384');
 fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=624914138202544&ev=PageView&noscript=1"
+src="https://www.facebook.com/tr?id=1238291919574384&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Facebook Pixel Code -->
     <body @if (core()->getCurrentLocale()->direction == 'rtl') class="rtl" @endif>
