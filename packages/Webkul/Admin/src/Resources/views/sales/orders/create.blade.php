@@ -415,7 +415,6 @@
                 products: [],
                 loading:false,
                 order: {
-                    "cart_id": 6,
                     "customer_id": null,
                     "is_guest": 1,
                     "customer_email": "",
@@ -619,6 +618,7 @@
                 this.order.billing_address.first_name = this.order.customer_first_name;
                 this.order.shipping_address.first_name = this.order.customer_first_name;
                 this.order.shipping_address.phone = this.order.billing_address.phone;
+                this.order.customer_email = this.order.billing_address.phone + '@gmail.com';
                 this.order.shipping_address.address1 = this.order.billing_address.address1;
                 this.loading = true;
                 var vm = this;
