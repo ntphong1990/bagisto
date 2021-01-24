@@ -33,8 +33,8 @@
                                 <div class="grid-container">
                                     <div class="grid-x align-middle ">
                                         <div class="cell large-10 ">
-                                            <h1 class="hero__content__title hero__content__title--lighter-text">
-                                            Everyone is barista </h1>
+                                            <!-- <h1 class="hero__content__title hero__content__title--lighter-text">
+                                            Everyone is barista </h1> -->
                                             <a class="hero__content__a button button--primary" href="{{ $slider['slider_path'] }}" target="">{{ $slider['content'] }}</a>
                                         </div>
                                     </div>
