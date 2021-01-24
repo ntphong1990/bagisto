@@ -4,6 +4,7 @@ namespace Webkul\Sales\Models;
 
 use Webkul\Checkout\Models\CartProxy;
 use Illuminate\Database\Eloquent\Model;
+use Webkul\API\Http\Resources\Sales\OrderItem;
 use Webkul\Sales\Contracts\Order as OrderContract;
 
 class Order extends Model implements OrderContract
@@ -86,6 +87,10 @@ class Order extends Model implements OrderContract
         return $this->hasMany(OrderItemProxy::modelClass())->whereNull('parent_id');
     }
 
+    public function items2()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
     /**
      * Get the comments record associated with the order.
      */

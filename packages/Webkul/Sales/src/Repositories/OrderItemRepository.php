@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Webkul\Core\Eloquent\Repository;
 use Webkul\Sales\Contracts\OrderItem;
-
 class OrderItemRepository extends Repository
 {
     /**
@@ -27,12 +26,37 @@ class OrderItemRepository extends Repository
     public function create(array $data)
     {
         if (isset($data['product']) && $data['product']) {
+            if (is_array($data['product'])) {
+                $data['product'] =   \Webkul\Product\Models\Product::find($data['product']['id']);
+            }
             $data['product_id'] = $data['product']->id;
             $data['product_type'] = get_class($data['product']);
-
+            unset($data['product']);
+            
+        } else {
+            
+            $data['product'] =   \Webkul\Product\Models\Product::find($data['id']);
+            $data['product_id'] = $data['product']->id;
+            $data['product_type'] = get_class($data['product']);
             unset($data['product']);
         }
-
+        unset($data['id']);
+        unset($data['images']);
+        unset($data['base_image']);
+        unset($data['variants']);
+        unset($data['attributes']);
+        unset($data['url_key']);
+        unset($data['formated_price']);
+        unset($data['short_description']);
+        unset($data['description']);
+        unset($data['created_at']);
+        unset($data['updated_at']);
+        unset($data['color_label']);
+        unset($data['size_label']);
+        unset($data['is_saved']);
+        
+        
+        Log::info(json_encode($data));
         return parent::create($data);
     }
 
@@ -104,24 +128,26 @@ class OrderItemRepository extends Repository
         $orderItems = [];
 
         if ($orderItem->getTypeInstance()->isComposite()) {
+            Log::info(4);
             foreach ($orderItem->children as $child) {
                 $orderItems[] = $child;
             }
         } else {
+            Log::info(5);
             $orderItems[] = $orderItem;
         }
 
         foreach ($orderItems as $item) {
-            if (! $item->product) {
+            if (!$item->product) {
                 continue;
             }
 
             if ($item->product->inventories->count() > 0) {
 
                 $orderedInventory = $item->product->ordered_inventories()
-                    ->where('channel_id', $orderItem->order->channel_id)
                     ->first();
-
+                Log::info(json_encode($item->product));
+                Log::info(json_encode($orderedInventory));
                 if (isset($item->qty_ordered)) {
                     $qty = $item->qty_ordered;
                 } else {
@@ -146,7 +172,7 @@ class OrderItemRepository extends Repository
                     $item->product->ordered_inventories()->create([
                         'qty'        => $qty,
                         'product_id' => $item->product_id,
-                        'channel_id' => $orderItem->order->channel->id,
+                        'channel_id' => $orderItem->order->channel ? $orderItem->order->channel->id : 1,
                     ]);
                 }
             }
@@ -162,10 +188,10 @@ class OrderItemRepository extends Repository
     public function returnQtyToProductInventory($orderItem)
     {
         $orderedInventory = $orderItem->product->ordered_inventories()
-                                      ->where('channel_id', $orderItem->order->channel->id)
-                                      ->first();
+            ->where('channel_id', $orderItem->order->channel->id)
+            ->first();
 
-        if (! $orderedInventory) {
+        if (!$orderedInventory) {
             return;
         }
 
@@ -182,18 +208,18 @@ class OrderItemRepository extends Repository
                 foreach ($shipmentItems as $shipmentItem) {
                     if ($orderItem->parent) {
                         $shippedQty = $orderItem->qty_ordered
-                                      ? ($orderItem->qty_ordered / $orderItem->parent->qty_ordered) * $shipmentItem->qty
-                                      : $orderItem->parent->qty_ordered;
+                            ? ($orderItem->qty_ordered / $orderItem->parent->qty_ordered) * $shipmentItem->qty
+                            : $orderItem->parent->qty_ordered;
                     } else {
                         $shippedQty = $shipmentItem->qty;
                     }
-    
+
                     $inventory = $orderItem->product->inventories()
-                    //  ->where('vendor_id', $data['vendor_id'])
-                     ->where('inventory_source_id', $shipmentItem->shipment->inventory_source_id)
-                     ->first();
-    
-                    $inventory->update(['qty' => $inventory->qty + $shippedQty]);                  
+                        //  ->where('vendor_id', $data['vendor_id'])
+                        ->where('inventory_source_id', $shipmentItem->shipment->inventory_source_id)
+                        ->first();
+
+                    $inventory->update(['qty' => $inventory->qty + $shippedQty]);
                 }
             }
         }

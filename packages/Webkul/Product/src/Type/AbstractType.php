@@ -706,7 +706,9 @@ abstract class AbstractType
                 . '<span class="regular-price">' . core()->currency($this->product->price) . '</span>'
                 . '<span class="special-price">' . core()->currency($this->getSpecialPrice()) . '</span>';
         } else {
-            $html = '<span>' . core()->currency($this->product->price) . '</span>';
+           // $html = '<span>' . core()->currency($this->product->price) . '</span>';
+            $html = '<span class="from">From</span> <span class="woocommerce-Price-amount amount">'.number_format($this->product->price).'<span
+            class="woocommerce-Price-currencySymbol"> '. core()->getCurrentCurrency()->symbol.'</span></span>';
         }
 
         return $html;

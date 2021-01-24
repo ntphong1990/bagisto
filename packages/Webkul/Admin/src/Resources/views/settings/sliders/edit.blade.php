@@ -72,7 +72,7 @@
                         <label for="content">{{ __('admin::app.settings.sliders.content') }}</label>
 
                         <div class="panel-body">
-                            <textarea id="tiny" class="control" id="add_content" name="content" rows="5">{{ $slider->content ? : old('content') }}</textarea>
+                            <textarea id="" class="control" id="add_content" name="content" rows="5">{{ $slider->content ? : old('content') }}</textarea>
                         </div>
 
                         <span class="control-error" v-if="errors.has('content')">@{{ errors.first('content') }}</span>

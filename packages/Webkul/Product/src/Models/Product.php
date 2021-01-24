@@ -13,7 +13,8 @@ use Webkul\Inventory\Models\InventorySourceProxy;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\Product\Contracts\Product as ProductContract;
 
-class Product extends Model implements ProductContract
+class Product extends Model implements
+    ProductContract
 {
     protected $fillable = [
         'type',
@@ -60,6 +61,21 @@ class Product extends Model implements ProductContract
     public function attribute_values()
     {
         return $this->hasMany(ProductAttributeValueProxy::modelClass());
+    }
+
+    public function option_attribute_values()
+    {
+        $arr = $this->hasMany(ProductAttributeValueProxy::modelClass())->whereIn('attribute_id', [23, 24])->get();
+        $ar = [];
+        foreach ($arr as $key => $value) {
+            $find = \Webkul\Attribute\Models\Attribute::find($value->attribute_id);
+            $op = \Webkul\Attribute\Models\AttributeOption::find($value->integer_value);
+            $ar[$find->code]["option_id"] = $value->integer_value;
+            $ar[$find->code]["option_label"] = $op->admin_name;
+            $ar[$find->code]["attribute_name"] = $find->admin_name;
+            $ar[$find->code]["id"] = $value->attribute_id;
+        }
+        return $ar;
     }
 
     /**
@@ -242,7 +258,7 @@ class Product extends Model implements ProductContract
 
         $this->typeInstance = app(config('product_types.' . $this->type . '.class'));
 
-        if (! $this->typeInstance instanceof AbstractType) {
+        if (!$this->typeInstance instanceof AbstractType) {
             throw new Exception(
                 "Please ensure the product type '{$this->type}' is configured in your application."
             );
@@ -311,9 +327,10 @@ class Product extends Model implements ProductContract
      */
     public function getAttribute($key)
     {
-        if (! method_exists(static::class, $key)
-            && ! in_array($key, ['parent_id', 'attribute_family_id'])
-            && ! isset($this->attributes[$key])
+        if (
+            !method_exists(static::class, $key)
+            && !in_array($key, ['parent_id', 'attribute_family_id'])
+            && !isset($this->attributes[$key])
         ) {
             if (isset($this->id)) {
                 $this->attributes[$key] = '';
@@ -363,7 +380,7 @@ class Product extends Model implements ProductContract
      */
     public function getCustomAttributeValue($attribute)
     {
-        if (! $attribute) {
+        if (!$attribute) {
             return;
         }
 

@@ -10,6 +10,8 @@ use Webkul\Sales\Contracts\Order;
 use Webkul\Sales\Models\Order as OrderModel;
 use Webkul\Shop\Generators\Sequencer;
 use Webkul\Shop\Generators\OrderNumberIdSequencer;
+use Illuminate\Support\Facades\Log;
+use Webkul\API\Http\Resources\Core\Channel;
 
 class OrderRepository extends Repository
 {
@@ -63,7 +65,7 @@ class OrderRepository extends Repository
     public function create(array $data)
     {
         DB::beginTransaction();
-
+        Log::info(json_encode($data));
         try {
             Event::dispatch('checkout.order.save.before', [$data]);
 
@@ -75,17 +77,23 @@ class OrderRepository extends Repository
             }
 
             if (isset($data['channel']) && $data['channel']) {
-                $data['channel_id'] = $data['channel']->id;
-                $data['channel_type'] = get_class($data['channel']);
-                $data['channel_name'] = $data['channel']->name;
+
+                // $data['channel'] = core()->getCurrentChannel();
+                $data['channel_id'] = $data['channel']['id'];
+                $data['channel_type'] = 'Webkul\Core\Models\Channel';
+                $data['channel_name'] = $data['channel']['name'];
+                //Log::info(get_class($data['channel']));
             } else {
+                Log::info(1);
                 unset($data['channel']);
             }
 
             $data['status'] = 'pending';
 
+            //$order = $this->model->create($data);
             $order = $this->model->create(array_merge($data, ['increment_id' => $this->generateIncrementId()]));
-
+            // $order->increment_id = $order->id . '';
+            // $order->save();
             $order->payment()->create($data['payment']);
 
             if (isset($data['shipping_address'])) {
@@ -93,9 +101,10 @@ class OrderRepository extends Repository
             }
 
             $order->addresses()->create($data['billing_address']);
-
             foreach ($data['items'] as $item) {
                 Event::dispatch('checkout.order.orderitem.save.before', $data);
+                $item['product'] = \Webkul\Product\Models\Product::find($item['product']['id']);
+               
 
                 $orderItem = $this->orderItemRepository->create(array_merge($item, ['order_id' => $order->id]));
 
@@ -104,7 +113,7 @@ class OrderRepository extends Repository
                         $this->orderItemRepository->create(array_merge($child, ['order_id' => $order->id, 'parent_id' => $orderItem->id]));
                     }
                 }
-
+               
                 $this->orderItemRepository->manageInventory($orderItem);
 
                 $this->downloadableLinkPurchasedRepository->saveLinks($orderItem, 'available');
@@ -132,14 +141,14 @@ class OrderRepository extends Repository
     {
         $order = $this->findOrFail($orderId);
 
-        if (! $order->canCancel()) {
+        if (!$order->canCancel()) {
             return false;
         }
 
         Event::dispatch('sales.order.cancel.before', $order);
 
         foreach ($order->items as $item) {
-            if (! $item->qty_to_cancel) {
+            if (!$item->qty_to_cancel) {
                 continue;
             }
 
@@ -187,15 +196,16 @@ class OrderRepository extends Repository
      */
     public function generateIncrementId()
     {
-        $generatorClass = core()->getConfigData('sales.orderSettings.order_number.order_number_generator-class') ?: false;
+        // $generatorClass = core()->getConfigData('sales.orderSettings.order_number.order_number_generator-class') ?: false;
 
-        if ($generatorClass !== false
-            && class_exists($generatorClass)
-            && in_array(Sequencer::class, class_implements($generatorClass), true)
-        ) {
-            /** @var $generatorClass Sequencer */
-            return $generatorClass::generate();
-        }
+        // if (
+        //     $generatorClass !== false
+        //     && class_exists($generatorClass)
+        //     && in_array(Sequencer::class, class_implements($generatorClass), true)
+        // ) {
+        //     /** @var $generatorClass Sequencer */
+        //     return $generatorClass::generate();
+        // }
 
         return OrderNumberIdSequencer::generate();
     }
@@ -212,7 +222,7 @@ class OrderRepository extends Repository
             $totalQtyOrdered += $item->qty_ordered;
             $totalQtyInvoiced += $item->qty_invoiced;
 
-            if (! $item->isStockable()) {
+            if (!$item->isStockable()) {
                 $totalQtyShipped += $item->qty_invoiced;
             } else {
                 $totalQtyShipped += $item->qty_shipped;
@@ -222,9 +232,11 @@ class OrderRepository extends Repository
             $totalQtyCanceled += $item->qty_canceled;
         }
 
-        if ($totalQtyOrdered != ($totalQtyRefunded + $totalQtyCanceled)
+        if (
+            $totalQtyOrdered != ($totalQtyRefunded + $totalQtyCanceled)
             && $totalQtyOrdered == $totalQtyInvoiced + $totalQtyCanceled
-            && $totalQtyOrdered == $totalQtyShipped + $totalQtyRefunded + $totalQtyCanceled) {
+            && $totalQtyOrdered == $totalQtyShipped + $totalQtyRefunded + $totalQtyCanceled
+        ) {
             return true;
         }
 

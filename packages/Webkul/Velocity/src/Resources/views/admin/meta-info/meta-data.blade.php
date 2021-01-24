@@ -347,8 +347,8 @@
                 width: "100%",
                 image_advtab: true,
                 valid_elements : '*[*]',
-                selector: 'textarea#home_page_content,textarea#footer_left_content,textarea#subscription_bar_content,textarea#footer_middle_content,textarea#product-policy',
-                plugins: 'image imagetools media wordcount save fullscreen code',
+                selector: 'textarea#home_page_content,textarea#footer_left_content,textarea#subscription_bar_content,textarea#footer_middle_content',
+                plugins: 'image link imagetools media wordcount save fullscreen code',
                 toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | code',
             });
         });

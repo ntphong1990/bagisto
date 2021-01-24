@@ -188,7 +188,11 @@ Route::group(['middleware' => ['web']], function () {
                 ])->name('admin.sales.orders.cancel');
 
                 Route::post('/orders/create/{order_id}', 'Webkul\Admin\Http\Controllers\Sales\OrderController@comment')->name('admin.sales.orders.comment');
+                Route::get('/orders/create', 'Webkul\Admin\Http\Controllers\Sales\OrderController@create')->defaults('_config', [
+                    'create' => 'admin::sales.orders.create',
+                ])->name('admin.sales.orders.create');
 
+                Route::post('/orders/save_order', 'Webkul\Admin\Http\Controllers\Sales\OrderController@saveOrder');
 
                 // Sales Invoices Routes
                 Route::get('/invoices', 'Webkul\Admin\Http\Controllers\Sales\InvoiceController@index')->defaults('_config', [

@@ -205,7 +205,7 @@
             })
 
             tinymce.init({
-                selector: 'textarea#description, textarea#short_description',
+                selector: 'textarea#description',
                 height: 200,
                 width: "100%",
                 plugins: 'image imagetools media wordcount save fullscreen code table lists link hr',

@@ -40,8 +40,7 @@ class OrderController extends Controller
     public function __construct(
         OrderRepository $orderRepository,
         OrderCommentRepository $orderCommentRepository
-    )
-    {
+    ) {
         $this->middleware('admin');
 
         $this->_config = request('_config');
@@ -73,6 +72,20 @@ class OrderController extends Controller
 
         return view($this->_config['view'], compact('order'));
     }
+
+    public function create()
+    {
+       // $order = $this->orderRepository->findOrFail(2);
+        return view($this->_config['create']);
+    }
+
+    public function saveOrder()
+    {
+        $data = request()->all();
+        return $this->orderRepository->create($data);
+        //return 'ok';
+    }
+
 
     /**
      * Cancel action for the specified resource.

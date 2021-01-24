@@ -37,8 +37,7 @@ class ProductRepository extends Repository
     public function __construct(
         AttributeRepository $attributeRepository,
         App $app
-    )
-    {
+    ) {
         $this->attributeRepository = $attributeRepository;
 
         parent::__construct($app);
@@ -110,7 +109,7 @@ class ProductRepository extends Repository
         Event::dispatch('catalog.product.delete.after', $id);
     }
 
-     /**
+    /**
      * @param int $categoryId
      *
      * @return \Illuminate\Support\Collection
@@ -122,8 +121,8 @@ class ProductRepository extends Repository
 
         if ($categoryId) {
             $qb->where('product_categories.category_id', $categoryId);
-        }    
-        
+        }
+
         return $qb->get();
     }
 
@@ -139,9 +138,9 @@ class ProductRepository extends Repository
         if (core()->getConfigData('catalog.products.storefront.products_per_page')) {
             $pages = explode(',', core()->getConfigData('catalog.products.storefront.products_per_page'));
 
-            $perPage = isset($params['limit']) ? (! empty($params['limit']) ? $params['limit'] : 9) : current($pages);
+            $perPage = isset($params['limit']) ? (!empty($params['limit']) ? $params['limit'] : 9) : current($pages);
         } else {
-            $perPage = isset($params['limit']) && ! empty($params['limit']) ? $params['limit'] : 9;
+            $perPage = isset($params['limit']) && !empty($params['limit']) ? $params['limit'] : 9;
         }
 
         $page = Paginator::resolveCurrentPage('page');
@@ -192,14 +191,14 @@ class ProductRepository extends Repository
                 $orderDirection = $params['order'];
             } else {
                 $sortOptions = $this->getDefaultSortByOption();
-                $orderDirection = ! empty($sortOptions) ? $sortOptions[1] : 'asc';
+                $orderDirection = !empty($sortOptions) ? $sortOptions[1] : 'asc';
             }
 
             if (isset($params['sort'])) {
                 $this->checkSortAttributeAndGenerateQuery($qb, $params['sort'], $orderDirection);
             } else {
                 $sortOptions = $this->getDefaultSortByOption();
-                if (! empty($sortOptions)) {
+                if (!empty($sortOptions)) {
                     $this->checkSortAttributeAndGenerateQuery($qb, $sortOptions[0], $orderDirection);
                 }
             }
@@ -235,20 +234,18 @@ class ProductRepository extends Repository
 
                                 $attributeQuery->where(function ($attributeValueQuery) use ($column, $filterInputValues) {
                                     foreach ($filterInputValues as $filterValue) {
-                                        if (! is_numeric($filterValue)) {
+                                        if (!is_numeric($filterValue)) {
                                             continue;
                                         }
                                         $attributeValueQuery->orWhereRaw("find_in_set(?, {$column})", [$filterValue]);
                                     }
                                 });
-
                             } else {
                                 $attributeQuery->where($column, '>=', core()->convertToBasePrice(current($filterInputValues)))
                                     ->where($column, '<=', core()->convertToBasePrice(end($filterInputValues)));
                             }
                         });
                     }
-
                 });
 
                 # this is key! if a product has been filtered down to the same number of attributes that we filtered on,
@@ -258,7 +255,6 @@ class ProductRepository extends Repository
             }
 
             return $qb->groupBy('product_flat.id');
-
         });
 
         # apply scope query so we can fetch the raw sql and perform a count
@@ -302,9 +298,10 @@ class ProductRepository extends Repository
             'channel' => core()->getCurrentChannelCode(),
         ]);
 
-        if (! $product) {
+        if (!$product) {
             throw (new ModelNotFoundException)->setModel(
-                get_class($this->model), $slug
+                get_class($this->model),
+                $slug
             );
         }
 
@@ -334,7 +331,7 @@ class ProductRepository extends Repository
      */
     public function getNewProducts()
     {
-        $count = core()->getConfigData('catalog.products.homepage.no_of_new_product_homepage'); 
+        $count = core()->getConfigData('catalog.products.homepage.no_of_new_product_homepage');
 
         $results = app(ProductFlatRepository::class)->scopeQuery(function ($query) {
             $channel = request()->get('channel') ?: (core()->getCurrentChannelCode() ?: core()->getDefaultChannelCode());
@@ -513,7 +510,7 @@ class ProductRepository extends Repository
     {
         $this->fillOriginalProduct($originalProduct);
 
-        if (! $originalProduct->getTypeInstance()->canBeCopied()) {
+        if (!$originalProduct->getTypeInstance()->canBeCopied()) {
             throw new Exception(trans('admin::app.response.product-can-not-be-copied', ['type' => $originalProduct->type]));
         }
 
@@ -648,7 +645,8 @@ class ProductRepository extends Repository
             // change name of copied product
             if ($oldValue->attribute_id === $attributeIds['name']) {
                 $copyOf = trans('admin::app.copy-of');
-                $copiedName = sprintf('%s%s (%s)',
+                $copiedName = sprintf(
+                    '%s%s (%s)',
                     Str::startsWith($originalProduct->name, $copyOf) ? '' : $copyOf,
                     $originalProduct->name,
                     $randomSuffix
@@ -660,7 +658,8 @@ class ProductRepository extends Repository
             // change url_key of copied product
             if ($oldValue->attribute_id === $attributeIds['url_key']) {
                 $copyOfSlug = trans('admin::app.copy-of-slug');
-                $copiedSlug = sprintf('%s%s-%s',
+                $copiedSlug = sprintf(
+                    '%s%s-%s',
                     Str::startsWith($originalProduct->url_key, $copyOfSlug) ? '' : $copyOfSlug,
                     $originalProduct->url_key,
                     $randomSuffix
@@ -682,7 +681,6 @@ class ProductRepository extends Repository
             }
 
             $copiedProduct->attribute_values()->save($newValue);
-
         }
 
         $newProductFlat->save();
@@ -696,7 +694,7 @@ class ProductRepository extends Repository
     {
         $attributesToSkip = config('products.skipAttributesOnCopy') ?? [];
 
-        if (! in_array('categories', $attributesToSkip)) {
+        if (!in_array('categories', $attributesToSkip)) {
             foreach ($originalProduct->categories as $category) {
                 DB::table('product_categories')->insert([
                     'product_id'  => $copiedProduct->id,
@@ -705,37 +703,37 @@ class ProductRepository extends Repository
             }
         }
 
-        if (! in_array('inventories', $attributesToSkip)) {
+        if (!in_array('inventories', $attributesToSkip)) {
             foreach ($originalProduct->inventories as $inventory) {
                 $copiedProduct->inventories()->save($inventory->replicate());
             }
         }
 
-        if (! in_array('customer_group_pricces', $attributesToSkip)) {
+        if (!in_array('customer_group_pricces', $attributesToSkip)) {
             foreach ($originalProduct->customer_group_prices as $customer_group_price) {
                 $copiedProduct->customer_group_prices()->save($customer_group_price->replicate());
             }
         }
 
-        if (! in_array('images', $attributesToSkip)) {
+        if (!in_array('images', $attributesToSkip)) {
             foreach ($originalProduct->images as $image) {
                 $copiedProduct->images()->save($image->replicate());
             }
         }
 
-        if (! in_array('super_attributes', $attributesToSkip)) {
+        if (!in_array('super_attributes', $attributesToSkip)) {
             foreach ($originalProduct->super_attributes as $super_attribute) {
                 $copiedProduct->super_attributes()->save($super_attribute);
             }
         }
 
-        if (! in_array('bundle_options', $attributesToSkip)) {
+        if (!in_array('bundle_options', $attributesToSkip)) {
             foreach ($originalProduct->bundle_options as $bundle_option) {
                 $copiedProduct->bundle_options()->save($bundle_option->replicate());
             }
         }
 
-        if (! in_array('variants', $attributesToSkip)) {
+        if (!in_array('variants', $attributesToSkip)) {
             foreach ($originalProduct->variants as $variant) {
                 $variant = $this->copy($variant);
                 $variant->parent_id = $copiedProduct->id;

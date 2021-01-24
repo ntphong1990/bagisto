@@ -29,6 +29,7 @@
         <div class="dropdown">
             @php
                 $localeImage = null;
+               
             @endphp
 
             @foreach (core()->getCurrentChannel()->locales as $locale)

@@ -309,24 +309,24 @@ class Helper extends Review
         $reviewHelper = app('Webkul\Product\Helpers\Review');
         $productImageHelper = app('Webkul\Product\Helpers\ProductImage');
 
-        $totalReviews = $reviewHelper->getTotalReviews($product);
+        //$totalReviews = $reviewHelper->getTotalReviews($product);
 
-        $avgRatings = ceil($reviewHelper->getAverageRating($product));
+//$avgRatings = ceil($reviewHelper->getAverageRating($product));
 
-        $galleryImages = $productImageHelper->getGalleryImages($product);
-        $productImage = $productImageHelper->getProductBaseImage($product)['medium_image_url'];
+       $galleryImages = $productImageHelper->getGalleryImages($product);
+       $productImage = $productImageHelper->getProductBaseImage($product)['medium_image_url'];
 
         $largeProductImageName = "large-product-placeholder.png";
         $mediumProductImageName = "meduim-product-placeholder.png";
 
-        if (strpos($productImage, $mediumProductImageName) > -1) {
-            $productImageNameCollection = explode('/', $productImage);
-            $productImageName = $productImageNameCollection[sizeof($productImageNameCollection) - 1];
+        // if (strpos($productImage, $mediumProductImageName) > -1) {
+        //     $productImageNameCollection = explode('/', $productImage);
+        //     $productImageName = $productImageNameCollection[sizeof($productImageNameCollection) - 1];
 
-            if ($productImageName == $mediumProductImageName) {
-                $productImage = str_replace($mediumProductImageName, $largeProductImageName, $productImage);
-            }
-        }
+        //     if ($productImageName == $mediumProductImageName) {
+        //         $productImage = str_replace($mediumProductImageName, $largeProductImageName, $productImage);
+        //     }
+        // }
 
         $priceHTML = view('shop::products.price', ['product' => $product])->render();
 
@@ -334,8 +334,9 @@ class Helper extends Review
 
         return [
             'priceHTML'         => $priceHTML,
-            'avgRating'         => $avgRatings,
-            'totalReviews'      => $totalReviews,
+            'price' => $product->price,
+            'avgRating'         => 5,
+            'totalReviews'      => 0,
             'image'             => $productImage,
             'new'               => $isProductNew,
             'galleryImages'     => $galleryImages,
@@ -344,21 +345,18 @@ class Helper extends Review
             'description'       => $product->description,
             'shortDescription'  => $product->short_description,
             'firstReviewText'   => trans('velocity::app.products.be-first-review'),
-            'defaultAddToCart'  => view('shop::products.add-buttons', ['product' => $product])->render(),
+            'defaultAddToCart'  => '',
             'addToCartHtml'     => view('shop::products.add-to-cart', [
                 'product'           => $product,
                 'addWishlistClass'  => ! (isset($list) && $list) ? '' : '',
 
-                'showCompare'       => core()->getConfigData('general.content.shop.compare_option') == "1"
-                                       ? true : false,
+                'showCompare'       => false,
 
-                'btnText'           => (isset($metaInformation['btnText']) && $metaInformation['btnText'])
-                                       ? $metaInformation['btnText'] : null,
+                'btnText'           =>  null,
 
-                'moveToCart'        => (isset($metaInformation['moveToCart']) && $metaInformation['moveToCart'])
-                                       ? $metaInformation['moveToCart'] : null,
+                'moveToCart'        =>  null,
 
-                'addToCartBtnClass' => ! (isset($list) && $list) ? 'small-padding' : '',
+                'addToCartBtnClass' =>  'small-padding',
             ])->render(),
         ];
     }

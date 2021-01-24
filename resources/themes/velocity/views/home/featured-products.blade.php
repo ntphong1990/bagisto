@@ -8,14 +8,14 @@
 
 @push('scripts')
     <script type="text/x-template" id="featured-products-template">
-        <div class="container-fluid featured-products">
+        <div class="featured-products__carousel">
             <shimmer-component v-if="isLoading && !isMobileView"></shimmer-component>
 
             <template v-else-if="featuredProducts.length > 0">
-                <card-list-header heading="{{ __('shop::app.home.featured-products') }}">
-                </card-list-header>
+                <!-- <card-list-header heading="{{ __('shop::app.home.featured-products') }}"> -->
+                <!-- </card-list-header> -->
 
-                <div class="carousel-products vc-full-screen {{ $direction }}" v-if="!isMobileView">
+                <div class="swiper-container swiper-container-initialized swiper-container-horizontal swiper-container-free-mode" v-if="!isMobileView">
                     <carousel-component
                         slides-per-page="6"
                         navigation-enabled="hide"
@@ -23,12 +23,13 @@
                         id="fearured-products-carousel"
                         locale-direction="{{ $direction }}"
                         :autoplay="false"
+                        
                         :slides-count="featuredProducts.length">
 
                         <slide
                             :key="index"
                             :slot="`slide-${index}`"
-                            v-for="(product, index) in featuredProducts">
+                            v-for="(product, index) in featuredProducts" class="swiper-wrapper">
                             <product-card
                                 :list="list"
                                 :product="product">

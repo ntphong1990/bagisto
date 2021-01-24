@@ -44,7 +44,7 @@ $(document).ready(function () {
             onSubmit: function (e) {
                 this.toggleButtonDisable(true);
 
-                if(typeof tinyMCE !== 'undefined')
+                if (typeof tinyMCE !== 'undefined')
                     tinyMCE.triggerSave();
 
                 this.$validator.validateAll().then(result => {
@@ -58,7 +58,7 @@ $(document).ready(function () {
                 });
             },
 
-            toggleButtonDisable (value) {
+            toggleButtonDisable(value) {
                 var buttons = document.getElementsByTagName("button");
 
                 for (var i = 0; i < buttons.length; i++) {
@@ -69,8 +69,8 @@ $(document).ready(function () {
             addServerErrors(scope = null) {
                 for (var key in serverErrors) {
                     var inputNames = [];
-                    key.split('.').forEach(function(chunk, index) {
-                        if(index) {
+                    key.split('.').forEach(function (chunk, index) {
+                        if (index) {
                             inputNames.push('[' + chunk + ']')
                         } else {
                             inputNames.push(chunk)
@@ -101,7 +101,7 @@ $(document).ready(function () {
 
                 const flashes = this.$refs.flashes;
 
-                flashMessages.forEach(function(flash) {
+                flashMessages.forEach(function (flash) {
                     flashes.addFlash(flash);
                 }, this);
             },

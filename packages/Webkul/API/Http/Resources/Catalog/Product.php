@@ -44,27 +44,24 @@ class Product extends JsonResource
             'images'                 => ProductImage::collection($product->images),
             'base_image'             => $this->productImageHelper->getProductBaseImage($product),
             'variants'               => Self::collection($this->variants),
-            'in_stock'               => $product->haveSufficientQuantity(1),
-            $this->mergeWhen($product->getTypeInstance()->isComposite(), [
-                'super_attributes' => Attribute::collection($product->super_attributes),
-            ]),
-            'special_price'          => $this->when(
-                    $product->getTypeInstance()->haveSpecialPrice(),
-                    $product->getTypeInstance()->getSpecialPrice()
-                ),
-            'formated_special_price' => $this->when(
-                    $product->getTypeInstance()->haveSpecialPrice(),
-                    core()->currency($product->getTypeInstance()->getSpecialPrice())
-                ),
-            'reviews'                => [
-                'total'          => $total = $this->productReviewHelper->getTotalReviews($product),
-                'total_rating'   => $total ? $this->productReviewHelper->getTotalRating($product) : 0,
-                'average_rating' => $total ? $this->productReviewHelper->getAverageRating($product) : 0,
-                'percentage'     => $total ? json_encode($this->productReviewHelper->getPercentageRating($product)) : [],
-            ],
+            // 'in_stock'               => $product->haveSufficientQuantity(1),
+            // $this->mergeWhen($product->getTypeInstance()->isComposite(), [
+            //     'super_attributes' => Attribute::collection($product->super_attributes),
+            // ]),
+            // 'special_price'          => $this->when(
+            //     $product->getTypeInstance()->haveSpecialPrice(),
+            //     $product->getTypeInstance()->getSpecialPrice()
+            // ),
+            // 'formated_special_price' => $this->when(
+            //     $product->getTypeInstance()->haveSpecialPrice(),
+            //     core()->currency($product->getTypeInstance()->getSpecialPrice())
+            // ),
             'is_saved'               => false,
             'created_at'             => $this->created_at,
             'updated_at'             => $this->updated_at,
+            'color_label'   => $this->color_label,
+            'size_label'   => $this->size_label,
+            'attributes' => $product->option_attribute_values()
         ];
     }
 }

@@ -37,6 +37,7 @@ class ProductController extends Controller
         return ProductResource::collection($this->productRepository->getAll(request()->input('category_id')));
     }
 
+
     /**
      * Returns a individual resource.
      *

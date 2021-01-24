@@ -25,14 +25,23 @@
                         $textContent = str_replace("\r\n", '', $slider['content']);
                     @endphp
                         <slide slot="slide-{{ $index }}">
-                            <a @if($slider['slider_path']) href="{{ $slider['slider_path'] }}" @endif>
-                                <img
-                                    class="col-12 no-padding banner-icon"
-                                    src="{{ url()->to('/') . '/storage/' . $slider['path'] }}" />
-
-                                <div class="show-content" v-html="'{{ $textContent }}'">
+                        <div  class="hero hero--grey">
+                            <div class="hero__background" style="background-color: #f2efed;">
+                                <img width="1600" height="600" src="{{ url()->to('/') . '/storage/' . $slider['path'] }}" class="hero__background__img" alt="Man with coffee" > 
+                            </div>
+                            <div class="hero__content">
+                                <div class="grid-container">
+                                    <div class="grid-x align-middle ">
+                                        <div class="cell large-10 ">
+                                            <h1 class="hero__content__title hero__content__title--lighter-text">
+                                            Everyone is barista </h1>
+                                            <a class="hero__content__a button button--primary" href="{{ $slider['slider_path'] }}" target="">{{ $slider['content'] }}</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </a>
+                            </div>
+                        </div>
+                            
                         </slide>
 
                     @endforeach
@@ -46,7 +55,7 @@
                 @endif
 
             </carousel-component>
-        </div>
+            
     </script>
 
     <script type='text/javascript'>

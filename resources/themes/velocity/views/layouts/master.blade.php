@@ -1,212 +1,201 @@
 @php
-    $velocityHelper = app('Webkul\Velocity\Helpers\Helper');
-    $velocityMetaData = $velocityHelper->getVelocityMetaData();
+$velocityHelper = app('Webkul\Velocity\Helpers\Helper');
+$velocityMetaData = $velocityHelper->getVelocityMetaData();
 
-    view()->share('velocityMetaData', $velocityMetaData);
+view()->share('velocityMetaData', $velocityMetaData);
 @endphp
 
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 
-    <head>
-        <title>@yield('page_title')</title>
+<head>
+    <title>@yield('page_title')</title>
 
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta http-equiv="content-language" content="{{ app()->getLocale() }}">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="content-language" content="{{ app()->getLocale() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" href="{{ asset('themes/velocity/assets/css/main-au.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('themes/velocity/assets/js/main.min.js') }}" />
-        <!-- <link rel="stylesheet" href="{{ asset('themes/velocity/assets/css/bootstrap.min.css') }}" /> -->
+    <link rel="stylesheet" href="{{ asset('themes/velocity/assets/css/main-au.min.css') }}" />
+    <!-- <link rel="stylesheet" href="{{ asset('themes/velocity/assets/css/velocity.css') }}" />
 
-        @if (core()->getCurrentLocale()->direction == 'rtl')
-            <link href="{{ asset('themes/velocity/assets/css/bootstrap-flipped.css') }}" rel="stylesheet">
-        @endif
+    <link rel="stylesheet" href="{{ asset('themes/velocity/assets/css/bootstrap.min.css') }}" /> -->
 
-        @if ($favicon = core()->getCurrentChannel()->favicon_url)
-            <link rel="icon" sizes="16x16" href="{{ $favicon }}" />
-        @else
-            <link rel="icon" sizes="16x16" href="{{ asset('/themes/velocity/assets/images/static/v-icon.png') }}" />
-        @endif
+    @if (core()->getCurrentLocale()->direction == 'rtl')
+    <link href="{{ asset('themes/velocity/assets/css/bootstrap-flipped.css') }}" rel="stylesheet">
+    @endif
 
-        @yield('head')
+    @if ($favicon = core()->getCurrentChannel()->favicon_url)
+    <link rel="icon" sizes="16x16" href="{{ $favicon }}" />
+    @else
+    <link rel="icon" sizes="16x16" href="{{ asset('/themes/velocity/assets/images/static/v-icon.png') }}" />
+    @endif
 
-        @section('seo')
-            <meta name="description" content="{{ core()->getCurrentChannel()->description }}"/>
-        @show
+    @yield('head')
 
-        @stack('css')
+    @section('seo')
+    <meta name="description" content="{{ core()->getCurrentChannel()->description }}" />
+    @show
 
-        {!! view_render_event('bagisto.shop.layout.head') !!}
+    @stack('css')
 
-        <style>
-            {!! core()->getConfigData('general.content.custom_scripts.custom_css') !!}
-        </style>
-    </head>
+    {!! view_render_event('bagisto.shop.layout.head') !!}
 
-    <body class="body body--loaded theme-au" @if (core()->getCurrentLocale()->direction == 'rtl') class="rtl" @endif>
-        {!! view_render_event('bagisto.shop.layout.body.before') !!}
+    <style>
+        {
+             ! ! core()->getConfigData('general.content.custom_scripts.custom_css') ! !
+        }
+    </style>
+</head>
 
-        @include('shop::UI.particals')
+<body class="body body--loaded theme-au" @if (core()->getCurrentLocale()->direction == 'rtl') class="rtl" @endif>
+    {!! view_render_event('bagisto.shop.layout.body.before') !!}
 
-        <div id="app">
-            {{-- <responsive-sidebar v-html="responsiveSidebarTemplate"></responsive-sidebar> --}}
+    @include('shop::UI.particals')
 
-            <product-quick-view v-if="$root.quickView"></product-quick-view>
+    <div id="app">
+        {{-- <responsive-sidebar v-html="responsiveSidebarTemplate"></responsive-sidebar> --}}
 
-            <div class="main-container-wrapper">
+        <product-quick-view v-if="$root.quickView"></product-quick-view>
 
-                @section('body-header')
-                    @include('shop::layouts.top-nav.index')
+        <div class="main-container-wrapper">
 
-                    {!! view_render_event('bagisto.shop.layout.header.before') !!}
+            @section('body-header')
+            @include('shop::layouts.top-nav.index')
 
-                        @include('shop::layouts.header.index')
+            {!! view_render_event('bagisto.shop.layout.header.before') !!}
 
-                    {!! view_render_event('bagisto.shop.layout.header.after') !!}
+            @include('shop::layouts.header.index')
 
-                    <div class="main-content-wrapper col-12 no-padding">
-                        @php
-                            $velocityContent = app('Webkul\Velocity\Repositories\ContentRepository')->getAllContents();
-                        @endphp
+            {!! view_render_event('bagisto.shop.layout.header.after') !!}
 
-                        <content-header
-                            url="{{ url()->to('/') }}"
-                            :header-content="{{ json_encode($velocityContent) }}"
-                            heading= "{{ __('velocity::app.menu-navbar.text-category') }}"
-                            category-count="{{ $velocityMetaData ? $velocityMetaData->sidebar_category_count : 10 }}"
-                        ></content-header>
+            <div class="main-content-wrapper col-12 no-padding">
+                @php
+                $velocityContent = app('Webkul\Velocity\Repositories\ContentRepository')->getAllContents();
+                @endphp
 
-                        <div class="">
-                            <div class="row col-12 remove-padding-margin">
-                                <sidebar-component
-                                    main-sidebar=true
-                                    id="sidebar-level-0"
-                                    url="{{ url()->to('/') }}"
-                                    category-count="{{ $velocityMetaData ? $velocityMetaData->sidebar_category_count : 10 }}"
-                                    add-class="category-list-container pt10">
-                                </sidebar-component>
+                <content-header url="{{ url()->to('/') }}" :header-content="{{ json_encode($velocityContent) }}" heading="{{ __('velocity::app.menu-navbar.text-category') }}" category-count="{{ $velocityMetaData ? $velocityMetaData->sidebar_category_count : 10 }}"></content-header>
 
-                                <div
-                                    class="col-12 no-padding content" id="home-right-bar-container">
+                <div class="">
+                    <div class="row col-12 remove-padding-margin">
 
-                                    <div class="container-right row no-margin col-12 no-padding">
+                        <div class="col-12 no-padding content" id="home-right-bar-container">
 
-                                        {!! view_render_event('bagisto.shop.layout.content.before') !!}
+                            <div class="container-right row no-margin col-12 no-padding">
 
-                                        @yield('content-wrapper')
+                                {!! view_render_event('bagisto.shop.layout.content.before') !!}
 
-                                        {!! view_render_event('bagisto.shop.layout.content.after') !!}
-                                    </div>
+                                @yield('content-wrapper')
 
-                                </div>
+                                {!! view_render_event('bagisto.shop.layout.content.after') !!}
                             </div>
+
                         </div>
                     </div>
-                @show
-
-                <div class="container">
-
-                    {!! view_render_event('bagisto.shop.layout.full-content.before') !!}
-
-                        @yield('full-content-wrapper')
-
-                    {!! view_render_event('bagisto.shop.layout.full-content.after') !!}
-
                 </div>
             </div>
+            @show
 
-            <div class="modal-parent" id="loader" style="top: 0" v-show="showPageLoader">
-                <overlay-loader :is-open="true"></overlay-loader>
+            <div class="container">
+
+                {!! view_render_event('bagisto.shop.layout.full-content.before') !!}
+
+                @yield('full-content-wrapper')
+
+                {!! view_render_event('bagisto.shop.layout.full-content.after') !!}
+
             </div>
         </div>
 
-        <!-- below footer -->
-        @section('footer')
-            {!! view_render_event('bagisto.shop.layout.footer.before') !!}
+        <div class="modal-parent" id="loader" style="top: 0" v-show="showPageLoader">
+            <overlay-loader :is-open="true"></overlay-loader>
+        </div>
+    </div>
 
-                @include('shop::layouts.footer.index')
+    <!-- below footer -->
+    @section('footer')
+    {!! view_render_event('bagisto.shop.layout.footer.before') !!}
 
-            {!! view_render_event('bagisto.shop.layout.footer.after') !!}
-        @show
+    @include('shop::layouts.footer.index')
 
-        {!! view_render_event('bagisto.shop.layout.body.after') !!}
+    {!! view_render_event('bagisto.shop.layout.footer.after') !!}
+    @show
 
-        <div id="alert-container"></div>
+    {!! view_render_event('bagisto.shop.layout.body.after') !!}
 
-        <script
-            type="text/javascript"
-            baseUrl="{{ url()->to('/') }}"
-            src="{{ asset('themes/velocity/assets/js/velocity.js') }}">
-        </script>
+    <div id="alert-container"></div>
 
-        <script
-            type="text/javascript"
-            src="{{ asset('vendor/webkul/ui/assets/js/ui.js') }}">
-        </script>
 
-        <script
-            type="text/javascript"
-            src="{{ asset('themes/velocity/assets/js/jquery.ez-plus.js') }}">
-        </script>
 
-        <script type="text/javascript">
-            (() => {
-                window.showAlert = (messageType, messageLabel, message) => {
-                    if (messageType && message !== '') {
-                        let alertId = Math.floor(Math.random() * 1000);
+    <script type="text/javascript" baseUrl="{{ url()->to('/') }}" src="{{ asset('themes/velocity/assets/js/velocity.js') }}">
+    </script>
 
-                        let html = `<div class="alert ${messageType} alert-dismissible" id="${alertId}">
+    <script type="text/javascript" src="{{ asset('vendor/webkul/ui/assets/js/ui.js') }}">
+    </script>
+
+    <script type="text/javascript" src="{{ asset('themes/velocity/assets/js/jquery.ez-plus.js') }}">
+    </script>
+
+    <script type="text/javascript">
+        (() => {
+            window.showAlert = (messageType, messageLabel, message) => {
+                if (messageType && message !== '') {
+                    let alertId = Math.floor(Math.random() * 1000);
+
+                    let html = `<div class="alert ${messageType} alert-dismissible" id="${alertId}">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                             <strong>${messageLabel ? messageLabel + '!' : ''} </strong> ${message}.
                         </div>`;
 
-                        $('#alert-container').append(html).ready(() => {
-                            window.setTimeout(() => {
-                                $(`#alert-container #${alertId}`).remove();
-                            }, 5000);
-                        });
-                    }
+                    $('#alert-container').append(html).ready(() => {
+                        window.setTimeout(() => {
+                            $(`#alert-container #${alertId}`).remove();
+                        }, 5000);
+                    });
                 }
+            }
 
-                let messageType = '';
-                let messageLabel = '';
+            let messageType = '';
+            let messageLabel = '';
 
-                @if ($message = session('success'))
-                    messageType = 'alert-success';
-                    messageLabel = "{{ __('velocity::app.shop.general.alert.success') }}";
-                @elseif ($message = session('warning'))
-                    messageType = 'alert-warning';
-                    messageLabel = "{{ __('velocity::app.shop.general.alert.warning') }}";
-                @elseif ($message = session('error'))
-                    messageType = 'alert-danger';
-                    messageLabel = "{{ __('velocity::app.shop.general.alert.error') }}";
-                @elseif ($message = session('info'))
-                    messageType = 'alert-info';
-                    messageLabel = "{{ __('velocity::app.shop.general.alert.info') }}";
-                @endif
+            @if($message = session('success'))
+            messageType = 'alert-success';
+            messageLabel = "{{ __('velocity::app.shop.general.alert.success') }}";
+            @elseif($message = session('warning'))
+            messageType = 'alert-warning';
+            messageLabel = "{{ __('velocity::app.shop.general.alert.warning') }}";
+            @elseif($message = session('error'))
+            messageType = 'alert-danger';
+            messageLabel = "{{ __('velocity::app.shop.general.alert.error') }}";
+            @elseif($message = session('info'))
+            messageType = 'alert-info';
+            messageLabel = "{{ __('velocity::app.shop.general.alert.info') }}";
+            @endif
 
-                if (messageType && '{{ $message }}' !== '') {
-                    window.showAlert(messageType, messageLabel, '{{ $message }}');
-                }
+            if (messageType && '{{ $message }}' !== '') {
+                window.showAlert(messageType, messageLabel, '{{ $message }}');
+            }
 
-                window.serverErrors = [];
-                @if (isset($errors))
-                    @if (count($errors))
-                        window.serverErrors = @json($errors->getMessages());
-                    @endif
-                @endif
+            window.serverErrors = [];
+            @if(isset($errors))
+            @if(count($errors))
+            window.serverErrors = @json($errors->getMessages());
+            @endif
+            @endif
 
-                window._translations = @json(app('Webkul\Velocity\Helpers\Helper')->jsonTranslations());
-            })();
-        </script>
+            window._translations = @json(app('Webkul\Velocity\Helpers\Helper')->jsonTranslations());
+        })();
+    </script>
 
-        @stack('scripts')
+    @stack('scripts')
 
-        <script>
-            {!! core()->getConfigData('general.content.custom_scripts.custom_javascript') !!}
-        </script>
-    </body>
+    <script>
+        {
+            !!core()->getConfigData('general.content.custom_scripts.custom_javascript') !!
+        }
+    </script>
+    <script type="text/javascript" src="{{ asset('themes/velocity/assets/js/main.min.js') }}"></script>
+</body>
+
 </html>

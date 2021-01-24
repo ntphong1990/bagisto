@@ -1,602 +1,730 @@
 @extends('admin::layouts.master')
 
 @section('page_title')
-    {{ __('admin::app.sales.orders.view-title', ['order_id' => $order->increment_id]) }}
+{{ __('admin::app.sales.orders.view-title', ['order_id' => $order->increment_id]) }}
 @stop
 
 @section('content-wrapper')
 
-    <div class="content full-page">
+<div class="content full-page">
 
-        <div class="page-header">
+    <div class="page-header">
 
-            <div class="page-title">
-                <h1>
-                    {!! view_render_event('sales.order.title.before', ['order' => $order]) !!}
+        <div class="page-title">
+            <h1>
+                {!! view_render_event('sales.order.title.before', ['order' => $order]) !!}
 
-                    <i class="icon angle-left-icon back-link" onclick="window.location = history.length > 1 ? document.referrer : '{{ route('admin.dashboard.index') }}'"></i>
+                <i class="icon angle-left-icon back-link"
+                    onclick="window.location = history.length > 1 ? document.referrer : '{{ route('admin.dashboard.index') }}'"></i>
 
-                    {{ __('admin::app.sales.orders.view-title', ['order_id' => $order->increment_id]) }}
+                {{ __('admin::app.sales.orders.view-title', ['order_id' => $order->increment_id]) }}
 
-                    {!! view_render_event('sales.order.title.after', ['order' => $order]) !!}
-                </h1>
-            </div>
-
-            <div class="page-action">
-                {!! view_render_event('sales.order.page_action.before', ['order' => $order]) !!}
-
-                @if ($order->canCancel())
-                    <a href="{{ route('admin.sales.orders.cancel', $order->id) }}" class="btn btn-lg btn-primary" v-alert:message="'{{ __('admin::app.sales.orders.cancel-confirm-msg') }}'">
-                        {{ __('admin::app.sales.orders.cancel-btn-title') }}
-                    </a>
-                @endif
-
-                @if ($order->canInvoice())
-                    <a href="{{ route('admin.sales.invoices.create', $order->id) }}" class="btn btn-lg btn-primary">
-                        {{ __('admin::app.sales.orders.invoice-btn-title') }}
-                    </a>
-                @endif
-
-                @if ($order->canRefund())
-                    <a href="{{ route('admin.sales.refunds.create', $order->id) }}" class="btn btn-lg btn-primary">
-                        {{ __('admin::app.sales.orders.refund-btn-title') }}
-                    </a>
-                @endif
-
-                @if ($order->canShip())
-                    <a href="{{ route('admin.sales.shipments.create', $order->id) }}" class="btn btn-lg btn-primary">
-                        {{ __('admin::app.sales.orders.shipment-btn-title') }}
-                    </a>
-                @endif
-
-                {!! view_render_event('sales.order.page_action.after', ['order' => $order]) !!}
-            </div>
+                {!! view_render_event('sales.order.title.after', ['order' => $order]) !!}
+            </h1>
         </div>
 
-        <div class="page-content">
+        <div class="page-action">
+            {!! view_render_event('sales.order.page_action.before', ['order' => $order]) !!}
 
-            <tabs>
-                {!! view_render_event('sales.order.tabs.before', ['order' => $order]) !!}
+            @if ($order->canCancel())
+            <a href="{{ route('admin.sales.orders.cancel', $order->id) }}" class="btn btn-lg btn-primary"
+                v-alert:message="'{{ __('admin::app.sales.orders.cancel-confirm-msg') }}'">
+                {{ __('admin::app.sales.orders.cancel-btn-title') }}
+            </a>
+            @endif
 
-                <tab name="{{ __('admin::app.sales.orders.info') }}" :selected="true">
-                    <div class="sale-container">
+            @if ($order->canInvoice())
+            <a href="{{ route('admin.sales.invoices.create', $order->id) }}" class="btn btn-lg btn-primary">
+                {{ __('admin::app.sales.orders.invoice-btn-title') }}
+            </a>
+            @endif
 
-                        <accordian :title="'{{ __('admin::app.sales.orders.order-and-account') }}'" :active="true">
-                            <div slot="body">
+            @if ($order->canRefund())
+            <a href="{{ route('admin.sales.refunds.create', $order->id) }}" class="btn btn-lg btn-primary">
+                {{ __('admin::app.sales.orders.refund-btn-title') }}
+            </a>
+            @endif
 
-                                <div class="sale-section">
-                                    <div class="secton-title">
-                                        <span>{{ __('admin::app.sales.orders.order-info') }}</span>
-                                    </div>
+            @if ($order->canShip())
+            <a href="{{ route('admin.sales.shipments.create', $order->id) }}" class="btn btn-lg btn-primary">
+                {{ __('admin::app.sales.orders.shipment-btn-title') }}
+            </a>
+            @endif
+            <a class="btn btn-lg btn-primary" onclick="printDiv('printableArea')">
+                {{ __('admin::app.sales.invoices.print') }}
+            </a>
+            {!! view_render_event('sales.order.page_action.after', ['order' => $order]) !!}
+        </div>
+    </div>
 
-                                    <div class="section-content">
-                                        <div class="row">
-                                            <span class="title">
-                                                {{ __('admin::app.sales.orders.order-date') }}
-                                            </span>
+    <div class="page-content">
 
-                                            <span class="value">
-                                                {{ $order->created_at }}
-                                            </span>
-                                        </div>
+        <tabs>
+            {!! view_render_event('sales.order.tabs.before', ['order' => $order]) !!}
 
-                                        {!! view_render_event('sales.order.created_at.after', ['order' => $order]) !!}
+            <tab name="{{ __('admin::app.sales.orders.info') }}" :selected="true">
+                <div class="sale-container">
 
-                                        <div class="row">
-                                            <span class="title">
-                                                {{ __('admin::app.sales.orders.order-status') }}
-                                            </span>
+                    <accordian :title="'{{ __('admin::app.sales.orders.order-and-account') }}'" :active="true">
+                        <div slot="body">
 
-                                            <span class="value">
-                                                {{ $order->status_label }}
-                                            </span>
-                                        </div>
-
-                                        {!! view_render_event('sales.order.status_label.after', ['order' => $order]) !!}
-
-                                        <div class="row">
-                                            <span class="title">
-                                                {{ __('admin::app.sales.orders.channel') }}
-                                            </span>
-
-                                            <span class="value">
-                                                {{ $order->channel_name }}
-                                            </span>
-                                        </div>
-
-                                        {!! view_render_event('sales.order.channel_name.after', ['order' => $order]) !!}
-                                    </div>
+                            <div class="sale-section">
+                                <div class="secton-title">
+                                    <span>{{ __('admin::app.sales.orders.order-info') }}</span>
                                 </div>
 
-                                <div class="sale-section">
-                                    <div class="secton-title">
-                                        <span>{{ __('admin::app.sales.orders.account-info') }}</span>
+                                <div class="section-content">
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.order-date') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ $order->created_at }}
+                                        </span>
                                     </div>
 
-                                    <div class="section-content">
-                                        <div class="row">
-                                            <span class="title">
-                                                {{ __('admin::app.sales.orders.customer-name') }}
-                                            </span>
+                                    {!! view_render_event('sales.order.created_at.after', ['order' => $order]) !!}
 
-                                            <span class="value">
-                                                {{ $order->customer_full_name }}
-                                            </span>
-                                        </div>
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.order-status') }}
+                                        </span>
 
-                                        {!! view_render_event('sales.order.customer_full_name.after', ['order' => $order]) !!}
-
-                                        <div class="row">
-                                            <span class="title">
-                                                {{ __('admin::app.sales.orders.email') }}
-                                            </span>
-
-                                            <span class="value">
-                                                {{ $order->customer_email }}
-                                            </span>
-                                        </div>
-
-                                        {!! view_render_event('sales.order.customer_email.after', ['order' => $order]) !!}
-
-                                        @if (! is_null($order->customer) && ! is_null($order->customer->group))
-                                            <div class="row">
-                                                <span class="title">
-                                                    {{ __('admin::app.customers.customers.customer_group') }}
-                                                </span>
-
-                                                <span class="value">
-                                                    {{ $order->customer->group->name }}
-                                                </span>
-                                            </div>
-                                        @endif
-
-                                        {!! view_render_event('sales.order.customer_group.after', ['order' => $order]) !!}
+                                        <span class="value">
+                                            {{ $order->status_label }}
+                                        </span>
                                     </div>
+
+                                    {!! view_render_event('sales.order.status_label.after', ['order' => $order]) !!}
+
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.channel') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ $order->channel_name }}
+                                        </span>
+                                    </div>
+
+                                    {!! view_render_event('sales.order.channel_name.after', ['order' => $order]) !!}
                                 </div>
-
                             </div>
-                        </accordian>
 
-                        @if ($order->billing_address || $order->shipping_address)
-                            <accordian :title="'{{ __('admin::app.sales.orders.address') }}'" :active="true">
-                                <div slot="body">
+                            <div class="sale-section">
+                                <div class="secton-title">
+                                    <span>{{ __('admin::app.sales.orders.account-info') }}</span>
+                                </div>
 
-                                    @if($order->billing_address)
-                                        <div class="sale-section">
-                                            <div class="secton-title">
-                                                <span>{{ __('admin::app.sales.orders.billing-address') }}</span>
-                                            </div>
+                                <div class="section-content">
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.customer-name') }}
+                                        </span>
 
-                                            <div class="section-content">
-                                                @include ('admin::sales.address', ['address' => $order->billing_address])
+                                        <span class="value">
+                                            {{ $order->customer_full_name }}
+                                        </span>
+                                    </div>
 
-                                                {!! view_render_event('sales.order.billing_address.after', ['order' => $order]) !!}
-                                            </div>
-                                        </div>
+                                    {!! view_render_event('sales.order.customer_full_name.after', ['order' => $order])
+                                    !!}
+
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.email') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ $order->customer_email }}
+                                        </span>
+                                    </div>
+
+                                    {!! view_render_event('sales.order.customer_email.after', ['order' => $order]) !!}
+
+                                    @if (! is_null($order->customer) && ! is_null($order->customer->group))
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.customers.customers.customer_group') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ $order->customer->group->name }}
+                                        </span>
+                                    </div>
                                     @endif
 
-                                    @if ($order->shipping_address)
-                                        <div class="sale-section">
-                                            <div class="secton-title">
-                                                <span>{{ __('admin::app.sales.orders.shipping-address') }}</span>
-                                            </div>
+                                    {!! view_render_event('sales.order.customer_group.after', ['order' => $order]) !!}
+                                </div>
+                            </div>
 
-                                            <div class="section-content">
-                                                @include ('admin::sales.address', ['address' => $order->shipping_address])
+                        </div>
+                    </accordian>
 
-                                                {!! view_render_event('sales.order.shipping_address.after', ['order' => $order]) !!}
-                                            </div>
-                                        </div>
+                    @if ($order->billing_address || $order->shipping_address)
+                    <accordian :title="'{{ __('admin::app.sales.orders.address') }}'" :active="true">
+                        <div slot="body">
+
+                            @if($order->billing_address)
+                            <div class="sale-section">
+                                <div class="secton-title">
+                                    <span>{{ __('admin::app.sales.orders.billing-address') }}</span>
+                                </div>
+
+                                <div class="section-content">
+                                    @include ('admin::sales.address', ['address' => $order->billing_address])
+
+                                    {!! view_render_event('sales.order.billing_address.after', ['order' => $order]) !!}
+                                </div>
+                            </div>
+                            @endif
+
+                            @if ($order->shipping_address)
+                            <div class="sale-section">
+                                <div class="secton-title">
+                                    <span>{{ __('admin::app.sales.orders.shipping-address') }}</span>
+                                </div>
+
+                                <div class="section-content">
+                                    @include ('admin::sales.address', ['address' => $order->shipping_address])
+
+                                    {!! view_render_event('sales.order.shipping_address.after', ['order' => $order]) !!}
+                                </div>
+                            </div>
+                            @endif
+
+                        </div>
+                    </accordian>
+                    @endif
+
+                    <accordian :title="'{{ __('admin::app.sales.orders.payment-and-shipping') }}'" :active="true">
+                        <div slot="body">
+
+                            <div class="sale-section">
+                                <div class="secton-title">
+                                    <span>{{ __('admin::app.sales.orders.payment-info') }}</span>
+                                </div>
+
+                                <div class="section-content">
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.payment-method') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ core()->getConfigData('sales.paymentmethods.' . $order->payment->method .
+                                            '.title') }}
+                                        </span>
+                                    </div>
+
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.currency') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ $order->order_currency_code }}
+                                        </span>
+                                    </div>
+
+                                    @php $additionalDetails =
+                                    \Webkul\Payment\Payment::getAdditionalDetails($order->payment->method); @endphp
+
+                                    @if (! empty($additionalDetails))
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ $additionalDetails['title'] }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ $additionalDetails['value'] }}
+                                        </span>
+                                    </div>
                                     @endif
 
+                                    {!! view_render_event('sales.order.payment-method.after', ['order' => $order]) !!}
                                 </div>
-                            </accordian>
-                        @endif
-
-                        <accordian :title="'{{ __('admin::app.sales.orders.payment-and-shipping') }}'" :active="true">
-                            <div slot="body">
-
-                                <div class="sale-section">
-                                    <div class="secton-title">
-                                        <span>{{ __('admin::app.sales.orders.payment-info') }}</span>
-                                    </div>
-
-                                    <div class="section-content">
-                                        <div class="row">
-                                            <span class="title">
-                                                {{ __('admin::app.sales.orders.payment-method') }}
-                                            </span>
-
-                                            <span class="value">
-                                                {{ core()->getConfigData('sales.paymentmethods.' . $order->payment->method . '.title') }}
-                                            </span>
-                                        </div>
-
-                                        <div class="row">
-                                            <span class="title">
-                                                {{ __('admin::app.sales.orders.currency') }}
-                                            </span>
-
-                                            <span class="value">
-                                                {{ $order->order_currency_code }}
-                                            </span>
-                                        </div>
-
-                                        @php $additionalDetails = \Webkul\Payment\Payment::getAdditionalDetails($order->payment->method); @endphp
-
-                                        @if (! empty($additionalDetails))
-                                            <div class="row">
-                                                <span class="title">
-                                                    {{ $additionalDetails['title'] }}
-                                                </span>
-
-                                                <span class="value">
-                                                    {{ $additionalDetails['value'] }}
-                                                </span>
-                                            </div>
-                                        @endif
-
-                                        {!! view_render_event('sales.order.payment-method.after', ['order' => $order]) !!}
-                                    </div>
-                                </div>
-
-                                @if ($order->shipping_address)
-                                    <div class="sale-section">
-                                        <div class="secton-title">
-                                            <span>{{ __('admin::app.sales.orders.shipping-info') }}</span>
-                                        </div>
-
-                                        <div class="section-content">
-                                            <div class="row">
-                                                <span class="title">
-                                                    {{ __('admin::app.sales.orders.shipping-method') }}
-                                                </span>
-
-                                                <span class="value">
-                                                    {{ $order->shipping_title }}
-                                                </span>
-                                            </div>
-
-                                            <div class="row">
-                                                <span class="title">
-                                                    {{ __('admin::app.sales.orders.shipping-price') }}
-                                                </span>
-
-                                                <span class="value">
-                                                    {{ core()->formatBasePrice($order->base_shipping_amount) }}
-                                                </span>
-                                            </div>
-
-                                            {!! view_render_event('sales.order.shipping-method.after', ['order' => $order]) !!}
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
-                        </accordian>
 
-                        <accordian :title="'{{ __('admin::app.sales.orders.products-ordered') }}'" :active="true">
-                            <div slot="body">
-
-                                <div class="table">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>{{ __('admin::app.sales.orders.SKU') }}</th>
-                                                <th>{{ __('admin::app.sales.orders.product-name') }}</th>
-                                                <th>{{ __('admin::app.sales.orders.price') }}</th>
-                                                <th>{{ __('admin::app.sales.orders.item-status') }}</th>
-                                                <th>{{ __('admin::app.sales.orders.subtotal') }}</th>
-                                                <th>{{ __('admin::app.sales.orders.tax-percent') }}</th>
-                                                <th>{{ __('admin::app.sales.orders.tax-amount') }}</th>
-                                                @if ($order->base_discount_amount > 0)
-                                                    <th>{{ __('admin::app.sales.orders.discount-amount') }}</th>
-                                                @endif
-                                                <th>{{ __('admin::app.sales.orders.grand-total') }}</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-
-                                            @foreach ($order->items as $item)
-
-                                                <tr>
-                                                    <td>
-                                                        {{ $item->getTypeInstance()->getOrderedItem($item)->sku }}
-                                                    </td>
-
-                                                    <td>
-                                                        {{ $item->name }}
-
-                                                        @if (isset($item->additional['attributes']))
-                                                            <div class="item-options">
-
-                                                                @foreach ($item->additional['attributes'] as $attribute)
-                                                                    <b>{{ $attribute['attribute_name'] }} : </b>{{ $attribute['option_label'] }}</br>
-                                                                @endforeach
-
-                                                            </div>
-                                                        @endif
-                                                    </td>
-
-                                                    <td>{{ core()->formatBasePrice($item->base_price) }}</td>
-
-                                                    <td>
-                                                        <span class="qty-row">
-                                                            {{ $item->qty_ordered ? __('admin::app.sales.orders.item-ordered', ['qty_ordered' => $item->qty_ordered]) : '' }}
-                                                        </span>
-
-                                                        <span class="qty-row">
-                                                            {{ $item->qty_invoiced ? __('admin::app.sales.orders.item-invoice', ['qty_invoiced' => $item->qty_invoiced]) : '' }}
-                                                        </span>
-
-                                                        <span class="qty-row">
-                                                            {{ $item->qty_shipped ? __('admin::app.sales.orders.item-shipped', ['qty_shipped' => $item->qty_shipped]) : '' }}
-                                                        </span>
-
-                                                        <span class="qty-row">
-                                                            {{ $item->qty_refunded ? __('admin::app.sales.orders.item-refunded', ['qty_refunded' => $item->qty_refunded]) : '' }}
-                                                        </span>
-
-                                                        <span class="qty-row">
-                                                            {{ $item->qty_canceled ? __('admin::app.sales.orders.item-canceled', ['qty_canceled' => $item->qty_canceled]) : '' }}
-                                                        </span>
-                                                    </td>
-
-                                                    <td>{{ core()->formatBasePrice($item->base_total) }}</td>
-
-                                                    <td>{{ $item->tax_percent }}%</td>
-
-                                                    <td>{{ core()->formatBasePrice($item->base_tax_amount) }}</td>
-
-                                                    @if ($order->base_discount_amount > 0)
-                                                        <td>{{ core()->formatBasePrice($item->base_discount_amount) }}</td>
-                                                    @endif
-
-                                                    <td>{{ core()->formatBasePrice($item->base_total + $item->base_tax_amount - $item->base_discount_amount) }}</td>
-                                                </tr>
-                                            @endforeach
-                                    </table>
+                            @if ($order->shipping_address)
+                            <div class="sale-section">
+                                <div class="secton-title">
+                                    <span>{{ __('admin::app.sales.orders.shipping-info') }}</span>
                                 </div>
 
-                                <div class="summary-comment-container">
-                                    <div class="comment-container">
-                                        <form action="{{ route('admin.sales.orders.comment', $order->id) }}" method="post" @submit.prevent="onSubmit">
-                                            @csrf()
+                                <div class="section-content">
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.shipping-method') }}
+                                        </span>
 
-                                            <div class="control-group" :class="[errors.has('comment') ? 'has-error' : '']">
-                                                <label for="comment" class="required">{{ __('admin::app.sales.orders.comment') }}</label>
-                                                <textarea v-validate="'required'" class="control" id="comment" name="comment" data-vv-as="&quot;{{ __('admin::app.sales.orders.comment') }}&quot;"></textarea>
-                                                <span class="control-error" v-if="errors.has('comment')">@{{ errors.first('comment') }}</span>
-                                            </div>
-
-                                            <div class="control-group">
-                                                <span class="checkbox">
-                                                    <input type="checkbox" name="customer_notified" id="customer-notified" name="checkbox[]">
-                                                    <label class="checkbox-view" for="customer-notified"></label>
-                                                    {{ __('admin::app.sales.orders.notify-customer') }}
-                                                </span>
-                                            </div>
-
-                                            <button type="submit" class="btn btn-lg btn-primary">
-                                                {{ __('admin::app.sales.orders.submit-comment') }}
-                                            </button>
-                                        </form>
-
-                                        <ul class="comment-list">
-                                            @foreach ($order->comments()->orderBy('id', 'desc')->get() as $comment)
-                                                <li>
-                                                    <span class="comment-info">
-                                                        @if ($comment->customer_notified)
-                                                            {!! __('admin::app.sales.orders.customer-notified', ['date' => $comment->created_at]) !!}
-                                                        @else
-                                                            {!! __('admin::app.sales.orders.customer-not-notified', ['date' => $comment->created_at]) !!}
-                                                        @endif
-                                                    </span>
-
-                                                    <p>{{ $comment->comment }}</p>
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                        <span class="value">
+                                            {{ $order->shipping_title }}
+                                        </span>
                                     </div>
 
-                                    <table class="sale-summary">
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.shipping-price') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ core()->formatBasePrice($order->base_shipping_amount) }}
+                                        </span>
+                                    </div>
+
+                                    {!! view_render_event('sales.order.shipping-method.after', ['order' => $order]) !!}
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </accordian>
+
+                    <accordian :title="'{{ __('admin::app.sales.orders.products-ordered') }}'" :active="true">
+                        <div slot="body">
+
+                            <div class="table">
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <td>{{ __('admin::app.sales.orders.subtotal') }}</td>
-                                            <td>-</td>
-                                            <td>{{ core()->formatBasePrice($order->base_sub_total) }}</td>
+                                            <th>{{ __('admin::app.sales.orders.SKU') }}</th>
+                                            <th>{{ __('admin::app.sales.orders.product-name') }}</th>
+                                            <th>{{ __('admin::app.sales.orders.price') }}</th>
+                                            <th>{{ __('admin::app.sales.orders.item-status') }}</th>
+                                            <th>{{ __('admin::app.sales.orders.subtotal') }}</th>
+                                            <th>{{ __('admin::app.sales.orders.tax-percent') }}</th>
+                                            <th>{{ __('admin::app.sales.orders.tax-amount') }}</th>
+                                            @if ($order->base_discount_amount > 0)
+                                            <th>{{ __('admin::app.sales.orders.discount-amount') }}</th>
+                                            @endif
+                                            <th>{{ __('admin::app.sales.orders.grand-total') }}</th>
                                         </tr>
+                                    </thead>
 
-                                        @if ($order->haveStockableItems())
-                                            <tr>
-                                                <td>{{ __('admin::app.sales.orders.shipping-handling') }}</td>
-                                                <td>-</td>
-                                                <td>{{ core()->formatBasePrice($order->base_shipping_amount) }}</td>
-                                            </tr>
-                                        @endif
+                                    <tbody>
 
-                                        @if ($order->base_discount_amount > 0)
-                                            <tr>
-                                                <td>
-                                                    {{ __('admin::app.sales.orders.discount') }}
+                                        @foreach ($order->items as $item)
 
-                                                    @if ($order->coupon_code)
-                                                        ({{ $order->coupon_code }})
-                                                    @endif
-                                                </td>
-                                                <td>-</td>
-                                                <td>{{ core()->formatBasePrice($order->base_discount_amount) }}</td>
-                                            </tr>
-                                        @endif
+                                        <tr>
+                                            <td>
+                                                {{ $item->getTypeInstance()->getOrderedItem($item)->sku }}
+                                            </td>
 
-                                        <tr class="border">
-                                            <td>{{ __('admin::app.sales.orders.tax') }}</td>
-                                            <td>-</td>
-                                            <td>{{ core()->formatBasePrice($order->base_tax_amount) }}</td>
+                                            <td>
+                                                {{ $item->name }}
+
+                                                @if (isset($item->additional['attributes']))
+                                                <div class="item-options">
+
+                                                    @foreach ($item->additional['attributes'] as $attribute)
+                                                    <b>{{ $attribute['attribute_name'] }} : </b>{{
+                                                    $attribute['option_label'] }}</br>
+                                                    @endforeach
+
+                                                </div>
+                                                @endif
+                                            </td>
+
+                                            <td>{{ core()->formatBasePrice($item->base_price) }}</td>
+
+                                            <td>
+                                                <span class="qty-row">
+                                                    {{ $item->qty_ordered ? __('admin::app.sales.orders.item-ordered',
+                                                    ['qty_ordered' => $item->qty_ordered]) : '' }}
+                                                </span>
+
+                                                <span class="qty-row">
+                                                    {{ $item->qty_invoiced ? __('admin::app.sales.orders.item-invoice',
+                                                    ['qty_invoiced' => $item->qty_invoiced]) : '' }}
+                                                </span>
+
+                                                <span class="qty-row">
+                                                    {{ $item->qty_shipped ? __('admin::app.sales.orders.item-shipped',
+                                                    ['qty_shipped' => $item->qty_shipped]) : '' }}
+                                                </span>
+
+                                                <span class="qty-row">
+                                                    {{ $item->qty_refunded ? __('admin::app.sales.orders.item-refunded',
+                                                    ['qty_refunded' => $item->qty_refunded]) : '' }}
+                                                </span>
+
+                                                <span class="qty-row">
+                                                    {{ $item->qty_canceled ? __('admin::app.sales.orders.item-canceled',
+                                                    ['qty_canceled' => $item->qty_canceled]) : '' }}
+                                                </span>
+                                            </td>
+
+                                            <td>{{ core()->formatBasePrice($item->base_total) }}</td>
+
+                                            <td>{{ $item->tax_percent }}%</td>
+
+                                            <td>{{ core()->formatBasePrice($item->base_tax_amount) }}</td>
+
+                                            @if ($order->base_discount_amount > 0)
+                                            <td>{{ core()->formatBasePrice($item->base_discount_amount) }}</td>
+                                            @endif
+
+                                            <td>{{ core()->formatBasePrice($item->base_total + $item->base_tax_amount -
+                                                $item->base_discount_amount) }}</td>
                                         </tr>
-
-                                        <tr class="bold">
-                                            <td>{{ __('admin::app.sales.orders.grand-total') }}</td>
-                                            <td>-</td>
-                                            <td>{{ core()->formatBasePrice($order->base_grand_total) }}</td>
-                                        </tr>
-
-                                        <tr class="bold">
-                                            <td>{{ __('admin::app.sales.orders.total-paid') }}</td>
-                                            <td>-</td>
-                                            <td>{{ core()->formatBasePrice($order->base_grand_total_invoiced) }}</td>
-                                        </tr>
-
-                                        <tr class="bold">
-                                            <td>{{ __('admin::app.sales.orders.total-refunded') }}</td>
-                                            <td>-</td>
-                                            <td>{{ core()->formatBasePrice($order->base_grand_total_refunded) }}</td>
-                                        </tr>
-
-                                        <tr class="bold">
-                                            <td>{{ __('admin::app.sales.orders.total-due') }}</td>
-                                            <td>-</td>
-                                            <td>{{ core()->formatBasePrice($order->base_total_due) }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
+                                        @endforeach
+                                </table>
                             </div>
-                        </accordian>
 
-                    </div>
-                </tab>
+                            <div class="summary-comment-container">
+                                <div class="comment-container">
+                                    <form action="{{ route('admin.sales.orders.comment', $order->id) }}" method="post"
+                                        @submit.prevent="onSubmit">
+                                        @csrf()
 
-                <tab name="{{ __('admin::app.sales.orders.invoices') }}">
+                                        <div class="control-group" :class="[errors.has('comment') ? 'has-error' : '']">
+                                            <label for="comment" class="required">{{
+                                                __('admin::app.sales.orders.comment') }}</label>
+                                            <textarea v-validate="'required'" class="control" id="comment"
+                                                name="comment"
+                                                data-vv-as="&quot;{{ __('admin::app.sales.orders.comment') }}&quot;"></textarea>
+                                            <span class="control-error" v-if="errors.has('comment')">@{{
+                                                errors.first('comment') }}</span>
+                                        </div>
 
-                    <div class="table" style="padding: 20px 0">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>{{ __('admin::app.sales.invoices.id') }}</th>
-                                    <th>{{ __('admin::app.sales.invoices.date') }}</th>
-                                    <th>{{ __('admin::app.sales.invoices.order-id') }}</th>
-                                    <th>{{ __('admin::app.sales.invoices.customer-name') }}</th>
-                                    <th>{{ __('admin::app.sales.invoices.status') }}</th>
-                                    <th>{{ __('admin::app.sales.invoices.amount') }}</th>
-                                    <th>{{ __('admin::app.sales.invoices.action') }}</th>
-                                </tr>
-                            </thead>
+                                        <div class="control-group">
+                                            <span class="checkbox">
+                                                <input type="checkbox" name="customer_notified" id="customer-notified"
+                                                    name="checkbox[]">
+                                                <label class="checkbox-view" for="customer-notified"></label>
+                                                {{ __('admin::app.sales.orders.notify-customer') }}
+                                            </span>
+                                        </div>
 
-                            <tbody>
-                                @foreach ($order->invoices as $invoice)
+                                        <button type="submit" class="btn btn-lg btn-primary">
+                                            {{ __('admin::app.sales.orders.submit-comment') }}
+                                        </button>
+                                    </form>
+
+                                    <ul class="comment-list">
+                                        @foreach ($order->comments()->orderBy('id', 'desc')->get() as $comment)
+                                        <li>
+                                            <span class="comment-info">
+                                                @if ($comment->customer_notified)
+                                                {!! __('admin::app.sales.orders.customer-notified', ['date' =>
+                                                $comment->created_at]) !!}
+                                                @else
+                                                {!! __('admin::app.sales.orders.customer-not-notified', ['date' =>
+                                                $comment->created_at]) !!}
+                                                @endif
+                                            </span>
+
+                                            <p>{{ $comment->comment }}</p>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+
+                                <table class="sale-summary">
                                     <tr>
-                                        <td>#{{ $invoice->id }}</td>
-                                        <td>{{ $invoice->created_at }}</td>
-                                        <td>#{{ $invoice->order->increment_id }}</td>
-                                        <td>{{ $invoice->address->name }}</td>
-                                        <td>{{ $invoice->status_label }}</td>
-                                        <td>{{ core()->formatBasePrice($invoice->base_grand_total) }}</td>
-                                        <td class="action">
-                                            <a href="{{ route('admin.sales.invoices.view', $invoice->id) }}">
-                                                <i class="icon eye-icon"></i>
-                                            </a>
-                                        </td>
+                                        <td>{{ __('admin::app.sales.orders.subtotal') }}</td>
+                                        <td>-</td>
+                                        <td>{{ core()->formatBasePrice($order->base_sub_total) }}</td>
                                     </tr>
-                                @endforeach
 
-                                @if (! $order->invoices->count())
+                                    @if ($order->haveStockableItems())
                                     <tr>
-                                        <td class="empty" colspan="7">{{ __('admin::app.common.no-result-found') }}</td>
-                                    <tr>
-                                @endif
-                        </table>
-                    </div>
-
-                </tab>
-
-                <tab name="{{ __('admin::app.sales.orders.shipments') }}">
-
-                    <div class="table" style="padding: 20px 0">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>{{ __('admin::app.sales.shipments.id') }}</th>
-                                    <th>{{ __('admin::app.sales.shipments.date') }}</th>
-                                    <th>{{ __('admin::app.sales.shipments.carrier-title') }}</th>
-                                    <th>{{ __('admin::app.sales.shipments.tracking-number') }}</th>
-                                    <th>{{ __('admin::app.sales.shipments.total-qty') }}</th>
-                                    <th>{{ __('admin::app.sales.shipments.action') }}</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                @foreach ($order->shipments as $shipment)
-                                    <tr>
-                                        <td>#{{ $shipment->id }}</td>
-                                        <td>{{ $shipment->created_at }}</td>
-                                        <td>{{ $shipment->carrier_title }}</td>
-                                        <td>{{ $shipment->track_number }}</td>
-                                        <td>{{ $shipment->total_qty }}</td>
-                                        <td class="action">
-                                            <a href="{{ route('admin.sales.shipments.view', $shipment->id) }}">
-                                                <i class="icon eye-icon"></i>
-                                            </a>
-                                        </td>
+                                        <td>{{ __('admin::app.sales.orders.shipping-handling') }}</td>
+                                        <td>-</td>
+                                        <td>{{ core()->formatBasePrice($order->base_shipping_amount) }}</td>
                                     </tr>
-                                @endforeach
+                                    @endif
 
-                                @if (! $order->shipments->count())
+                                    @if ($order->base_discount_amount > 0)
                                     <tr>
-                                        <td class="empty" colspan="7">{{ __('admin::app.common.no-result-found') }}</td>
-                                    <tr>
-                                @endif
-                        </table>
-                    </div>
+                                        <td>
+                                            {{ __('admin::app.sales.orders.discount') }}
 
-                </tab>
-
-                <tab name="{{ __('admin::app.sales.orders.refunds') }}">
-
-                    <div class="table" style="padding: 20px 0">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>{{ __('admin::app.sales.refunds.id') }}</th>
-                                    <th>{{ __('admin::app.sales.refunds.date') }}</th>
-                                    <th>{{ __('admin::app.sales.refunds.order-id') }}</th>
-                                    <th>{{ __('admin::app.sales.refunds.customer-name') }}</th>
-                                    <th>{{ __('admin::app.sales.refunds.status') }}</th>
-                                    <th>{{ __('admin::app.sales.refunds.refunded') }}</th>
-                                    <th>{{ __('admin::app.sales.refunds.action') }}</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                @foreach ($order->refunds as $refund)
-                                    <tr>
-                                        <td>#{{ $refund->id }}</td>
-                                        <td>{{ $refund->created_at }}</td>
-                                        <td>#{{ $refund->order->increment_id }}</td>
-                                        <td>{{ $refund->order->customer_full_name }}</td>
-                                        <td>{{ __('admin::app.sales.refunds.refunded') }}</td>
-                                        <td>{{ core()->formatBasePrice($refund->base_grand_total) }}</td>
-                                        <td class="action">
-                                            <a href="{{ route('admin.sales.refunds.view', $refund->id) }}">
-                                                <i class="icon eye-icon"></i>
-                                            </a>
+                                            @if ($order->coupon_code)
+                                            ({{ $order->coupon_code }})
+                                            @endif
                                         </td>
+                                        <td>-</td>
+                                        <td>{{ core()->formatBasePrice($order->base_discount_amount) }}</td>
                                     </tr>
-                                @endforeach
+                                    @endif
 
-                                @if (! $order->refunds->count())
-                                    <tr>
-                                        <td class="empty" colspan="7">{{ __('admin::app.common.no-result-found') }}</td>
-                                    <tr>
+                                    <tr class="border">
+                                        <td>{{ __('admin::app.sales.orders.tax') }}</td>
+                                        <td>-</td>
+                                        <td>{{ core()->formatBasePrice($order->base_tax_amount) }}</td>
+                                    </tr>
+
+                                    <tr class="bold">
+                                        <td>{{ __('admin::app.sales.orders.grand-total') }}</td>
+                                        <td>-</td>
+                                        <td>{{ core()->formatBasePrice($order->base_grand_total) }}</td>
+                                    </tr>
+
+                                    <tr class="bold">
+                                        <td>{{ __('admin::app.sales.orders.total-paid') }}</td>
+                                        <td>-</td>
+                                        <td>{{ core()->formatBasePrice($order->base_grand_total_invoiced) }}</td>
+                                    </tr>
+
+                                    <tr class="bold">
+                                        <td>{{ __('admin::app.sales.orders.total-refunded') }}</td>
+                                        <td>-</td>
+                                        <td>{{ core()->formatBasePrice($order->base_grand_total_refunded) }}</td>
+                                    </tr>
+
+                                    <tr class="bold">
+                                        <td>{{ __('admin::app.sales.orders.total-due') }}</td>
+                                        <td>-</td>
+                                        <td>{{ core()->formatBasePrice($order->base_total_due) }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </accordian>
+
+                </div>
+            </tab>
+
+            <tab name="{{ __('admin::app.sales.orders.invoices') }}">
+
+                <div class="table" style="padding: 20px 0">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>{{ __('admin::app.sales.invoices.id') }}</th>
+                                <th>{{ __('admin::app.sales.invoices.date') }}</th>
+                                <th>{{ __('admin::app.sales.invoices.order-id') }}</th>
+                                <th>{{ __('admin::app.sales.invoices.customer-name') }}</th>
+                                <th>{{ __('admin::app.sales.invoices.status') }}</th>
+                                <th>{{ __('admin::app.sales.invoices.amount') }}</th>
+                                <th>{{ __('admin::app.sales.invoices.action') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($order->invoices as $invoice)
+                            <tr>
+                                <td>#{{ $invoice->id }}</td>
+                                <td>{{ $invoice->created_at }}</td>
+                                <td>#{{ $invoice->order->increment_id }}</td>
+                                <td>{{ $invoice->address->name }}</td>
+                                <td>{{ $invoice->status_label }}</td>
+                                <td>{{ core()->formatBasePrice($invoice->base_grand_total) }}</td>
+                                <td class="action">
+                                    <a href="{{ route('admin.sales.invoices.view', $invoice->id) }}">
+                                        <i class="icon eye-icon"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+
+                            @if (! $order->invoices->count())
+                            <tr>
+                                <td class="empty" colspan="7">{{ __('admin::app.common.no-result-found') }}</td>
+                            <tr>
                                 @endif
-                        </table>
-                    </div>
+                    </table>
+                </div>
 
-                </tab>
+            </tab>
 
-                {!! view_render_event('sales.order.tabs.after', ['order' => $order]) !!}
-            </tabs>
+            <tab name="{{ __('admin::app.sales.orders.shipments') }}">
+
+                <div class="table" style="padding: 20px 0">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>{{ __('admin::app.sales.shipments.id') }}</th>
+                                <th>{{ __('admin::app.sales.shipments.date') }}</th>
+                                <th>{{ __('admin::app.sales.shipments.carrier-title') }}</th>
+                                <th>{{ __('admin::app.sales.shipments.tracking-number') }}</th>
+                                <th>{{ __('admin::app.sales.shipments.total-qty') }}</th>
+                                <th>{{ __('admin::app.sales.shipments.action') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach ($order->shipments as $shipment)
+                            <tr>
+                                <td>#{{ $shipment->id }}</td>
+                                <td>{{ $shipment->created_at }}</td>
+                                <td>{{ $shipment->carrier_title }}</td>
+                                <td>{{ $shipment->track_number }}</td>
+                                <td>{{ $shipment->total_qty }}</td>
+                                <td class="action">
+                                    <a href="{{ route('admin.sales.shipments.view', $shipment->id) }}">
+                                        <i class="icon eye-icon"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+
+                            @if (! $order->shipments->count())
+                            <tr>
+                                <td class="empty" colspan="7">{{ __('admin::app.common.no-result-found') }}</td>
+                            <tr>
+                                @endif
+                    </table>
+                </div>
+
+            </tab>
+
+            <tab name="{{ __('admin::app.sales.orders.refunds') }}">
+
+                <div class="table" style="padding: 20px 0">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>{{ __('admin::app.sales.refunds.id') }}</th>
+                                <th>{{ __('admin::app.sales.refunds.date') }}</th>
+                                <th>{{ __('admin::app.sales.refunds.order-id') }}</th>
+                                <th>{{ __('admin::app.sales.refunds.customer-name') }}</th>
+                                <th>{{ __('admin::app.sales.refunds.status') }}</th>
+                                <th>{{ __('admin::app.sales.refunds.refunded') }}</th>
+                                <th>{{ __('admin::app.sales.refunds.action') }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach ($order->refunds as $refund)
+                            <tr>
+                                <td>#{{ $refund->id }}</td>
+                                <td>{{ $refund->created_at }}</td>
+                                <td>#{{ $refund->order->increment_id }}</td>
+                                <td>{{ $refund->order->customer_full_name }}</td>
+                                <td>{{ __('admin::app.sales.refunds.refunded') }}</td>
+                                <td>{{ core()->formatBasePrice($refund->base_grand_total) }}</td>
+                                <td class="action">
+                                    <a href="{{ route('admin.sales.refunds.view', $refund->id) }}">
+                                        <i class="icon eye-icon"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+
+                            @if (! $order->refunds->count())
+                            <tr>
+                                <td class="empty" colspan="7">{{ __('admin::app.common.no-result-found') }}</td>
+                            <tr>
+                                @endif
+                    </table>
+                </div>
+
+            </tab>
+
+            {!! view_render_event('sales.order.tabs.after', ['order' => $order]) !!}
+        </tabs>
+    </div>
+
+</div>
+<div id="printableArea" size=" width: 72.14cm;height: 29.7cm;" style=" width: 7.214cm;height: 29.7cm;background: white;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 0.5cm;
+    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: hidden;">
+    <div style="padding:8px">
+        <!-- <div class="image">
+            <img class="logo" width="100" src="{{ Storage::url(core()->getConfigData('sales.orderSettings.invoice_slip_design.logo')) }}"/>
+        </div> -->
+        <p style="font-size:20px;font-weight:700;margin:4px">Wanderlust</p>
+
+        <p style="margin:4px">Địa chỉ: 39/7 Đỗ Quang Đẩu, Quận 1, Hồ Chí Minh</p>
+        <p style="margin:4px">Hotline: 0979509139</p>
+        <br />
+        <p style="margin:4px;font-size:16px;font-weight:700;text-align: center;">HOÁ ĐƠN BÁN HÀNG</p>
+
+        <br />
+        <p style="margin:4px">Ngày: {{ $order->created_at->format('d-m-Y h:i')}}</p>
+        <p style="margin:4px">HD: #{{$order->increment_id}}</p>
+        <p style="margin:4px">Khách hàng: {{$order->customer_full_name}}</p>
+        <p style="margin:4px">SDT: {{$order->customer_phone}}</p>
+        <div class="table">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align:left">Giá</th>
+                        <th style="text-align:right">SL</th>
+                        <th style="text-align:right">Thành tiền</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach ($order->items as $item)
+
+                    <tr>
+                        <td colspan="3" style="border-bottom: none;padding:2px;padding-left:10px">{{ $item->name }}</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #000;">
+
+
+
+
+
+
+                        <td style="border-bottom: none;text-align:left;padding:2px;padding-left:10px">{{
+                            number_format($item->base_price) }}</td>
+
+                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px">
+
+                            {{$item->qty_ordered}}
+
+
+                        </td>
+
+                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px">{{
+                            number_format($item->base_total) }}</td>
+
+
+                    </tr>
+
+                    @endforeach
+
+
+            </table>
         </div>
+        <table class="sale-summary" style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td style="text-align:right">Tạm tính</td>
+                    <td>-</td>
+                    <td style="text-align:right;padding-right:8px">{{number_format($order->base_sub_total)}}</td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">Phí vận chuyển</td>
+                    <td>-</td>
+                    <td style="text-align:right;padding-right:8px">{{number_format($order->base_shipping_amount)}}</td>
+                </tr>
+                <tr class="border">
+                    <td style="text-align:right">Tổng tiền</td>
+                    <td>-</td>
+                    <td style="text-align:right;padding-right:8px">{{number_format($order->base_grand_total)}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+        <br />
+        <p>Cảm ơn sự ủng hộ của quý khách !!</p>
+        <i>*Vui lòng giữ hoá đơn trong trường hợp muốn đổi trả, thời hạn 30 ngày.</i>
 
     </div>
+</div>
+<script>
+    function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+
+</script>
 @stop

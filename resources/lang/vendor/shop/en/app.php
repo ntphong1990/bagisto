@@ -84,7 +84,7 @@ return [
         'rating-reviews' => 'Rating & Reviews',
         'submit' => 'SUBMIT',
         'delete-all' => 'All Reviews has deleted Succesfully',
-        'ratingreviews' => ':rating Ratings & :review Reviews',
+        'ratingreviews' => ':rating Đánh giá1 & :review Reviews',
         'star' => 'Star',
         'percentage' => ':percentage %',
         'id-star' => 'star',

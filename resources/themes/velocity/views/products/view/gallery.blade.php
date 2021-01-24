@@ -3,7 +3,6 @@
 
 @php
     $images = $productImageHelper->getGalleryImages($product);
-
     if (! count($images)) {
         $images[0] = $productImageHelper->getProductBaseImage($product);
     }
@@ -11,21 +10,12 @@
 
 {!! view_render_event('bagisto.shop.products.view.gallery.before', ['product' => $product]) !!}
 
-    <div class="product-image-group">
-        <div class="row col-12">
-            <magnify-image src="{{ $images[0]['large_image_url'] }}" v-if="!isMobile()">
-            </magnify-image>
-
-            <img
-                v-else
-                class="vc-small-product-image"
-                src="{{ $images[0]['large_image_url'] }}" />
-        </div>
-
+  
+    <div class="single-product__content__image">
+        <img src="{{ $images[0]['large_image_url'] }}" id="product_image" class="single-product__content__image__img"> <!----> <!----> <!---->
         <div class="row col-12">
             <product-gallery></product-gallery>
         </div>
-
     </div>
 
 {!! view_render_event('bagisto.shop.products.view.gallery.after', ['product' => $product]) !!}
@@ -126,6 +116,7 @@
                     },
 
                     changeImage: function({largeImageUrl, originalImageUrl}) {
+                        console.log('here');
                         this.currentLargeImageUrl = largeImageUrl;
 
                         this.currentOriginalImageUrl = originalImageUrl;
@@ -134,12 +125,11 @@
                             smallImageUrl: this.currentOriginalImageUrl
                         });
 
-                        let productImage = $('.vc-small-product-image');
-                        if (productImage && productImage[0]) {
-                            productImage = productImage[0];
+                        // let productImage = $('#product_image');
 
-                            productImage.src = this.currentOriginalImageUrl;
-                        }
+                        // productImage.src = '';
+                       // console.log(productImage);
+                        $("#product_image").attr("src",this.currentOriginalImageUrl);
                     },
 
                     scroll: function (navigateTo) {

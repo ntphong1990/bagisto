@@ -1,5 +1,5 @@
 @push('scripts')
-    <script type="text/x-template" id="logo-template">
+<script type="text/x-template" id="logo-template">
         <a
             :class="`left ${addClass}`"
             href="{{ route('shop.home.index') }}">
@@ -11,395 +11,22 @@
             @endif
         </a>
     </script>
-    <script type="text/x-template" id="content-header-template">
-        
+<script type="text/x-template" id="content-header-template">
+
         <header class="header">
-            <div class="vc-small-screen container" v-if="isMobile()">
-                <div class="row">
-                    <div class="col-6">
-                        <div v-if="hamburger" class="nav-container scrollable">
-                            <div class="wrapper" v-if="this.rootCategories">
-                                <div class="greeting drawer-section fw6">
-                                    <i class="material-icons">perm_identity</i>
-                                    <span>
-                                        @guest('customer')
-                                            <a class="unset" href="{{ route('customer.session.index') }}">
-                                            {{ __('velocity::app.responsive.header.greeting', ['customer' => 'Guest']) }}
-                                            </a>
-                                        @endguest
-
-                                        @auth('customer')
-                                            <a class="unset" href="{{ route('customer.profile.index') }}">
-                                                {{ __('velocity::app.responsive.header.greeting', ['customer' => auth()->guard('customer')->user()->first_name]) }}
-                                            </a>
-                                        @endauth
-
-                                        <i
-                                            @click="closeDrawer()"
-                                            class="material-icons pull-right text-dark">
-                                            cancel
-                                        </i>
-                                    </span>
-                                </div>
-
-                                @php
-                                    $currency = $locale = null;
-
-                                    $currentLocale = app()->getLocale();
-                                    $currentCurrency = core()->getCurrentCurrencyCode();
-
-                                    $allLocales = core()->getCurrentChannel()->locales;
-                                    $allCurrency = core()->getCurrentChannel()->currencies;
-                                @endphp
-
-                                @foreach ($allLocales as $appLocale)
-                                    @if ($appLocale->code == $currentLocale)
-                                        @php
-                                            $locale = $appLocale;
-                                        @endphp
-                                    @endif
-                                @endforeach
-
-                                @foreach ($allCurrency as $appCurrency)
-                                    @if ($appCurrency->code == $currentCurrency)
-                                        @php
-                                            $currency = $appCurrency;
-                                        @endphp
-                                    @endif
-                                @endforeach
-
-                                <ul type="none" class="velocity-content" v-if="headerContent.length > 0">
-                                    <li :key="index" v-for="(content, index) in headerContent">
-                                        <a
-                                            class="unset"
-                                            v-text="content.title"
-                                            :href="`${$root.baseUrl}/${content.page_link}`">
-                                        </a>
-                                    </li>
-                                </ul>
-
-                                <ul type="none" class="category-wrapper" v-if="rootCategoriesCollection.length > 0">
-                                    <li v-for="(category, index) in rootCategoriesCollection">
-                                        <a class="unset" :href="`${$root.baseUrl}/${category.slug}`">
-                                            <div class="category-logo">
-                                                <img
-                                                    class="category-icon"
-                                                    v-if="category.category_icon_path"
-                                                    :src="`${$root.baseUrl}/storage/${category.category_icon_path}`" />
-                                            </div>
-                                            <span v-text="category.name"></span>
-                                        </a>
-
-                                        <i class="rango-arrow-right" @click="toggleSubcategories(index, $event)"></i>
-                                    </li>
-                                </ul>
-
-                                @auth('customer')
-                                    <ul type="none" class="vc-customer-options">
-                                        <li>
-                                            <a href="{{ route('customer.profile.index') }}" class="unset">
-                                                <i class="icon profile text-down-3"></i>
-                                                <span>{{ __('shop::app.header.profile') }}</span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ route('customer.address.index') }}" class="unset">
-                                                <i class="icon address text-down-3"></i>
-                                                <span>{{ __('velocity::app.shop.general.addresses') }}</span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ route('customer.reviews.index') }}" class="unset">
-                                                <i class="icon reviews text-down-3"></i>
-                                                <span>{{ __('velocity::app.shop.general.reviews') }}</span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ route('customer.wishlist.index') }}" class="unset">
-                                                <i class="icon wishlist text-down-3"></i>
-                                                <span>{{ __('shop::app.header.wishlist') }}</span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ route('customer.orders.index') }}" class="unset">
-                                                <i class="icon orders text-down-3"></i>
-                                                <span>{{ __('velocity::app.shop.general.orders') }}</span>
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="{{ route('customer.downloadable_products.index') }}" class="unset">
-                                                <i class="icon downloadables text-down-3"></i>
-                                                <span>{{ __('velocity::app.shop.general.downloadables') }}</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                @endauth
-
-                                <ul type="none" class="meta-wrapper">
-                                    <li>
-                                        @if ($locale)
-                                            <div class="language-logo-wrapper">
-                                                @if ($locale->locale_image)
-                                                    <img
-                                                        class="language-logo"
-                                                        src="{{ asset('/storage/' . $locale->locale_image) }}" />
-                                                @elseif ($locale->code == "en")
-                                                    <img
-                                                        class="language-logo"
-                                                        src="{{ asset('/themes/velocity/assets/images/flags/en.png') }}" />
-                                                @endif
-                                            </div>
-                                            <span>{{ $locale->name }}</span>
-                                        @endif
-
-                                        <i
-                                            class="rango-arrow-right"
-                                            @click="toggleMetaInfo('languages')">
-                                        </i>
-                                    </li>
-
-                                    <li>
-                                        <span>{{ $currency->code }}</span>
-
-                                        <i
-                                            class="rango-arrow-right"
-                                            @click="toggleMetaInfo('currencies')">
-                                        </i>
-                                    </li>
-
-                                    <li>
-                                        @auth('customer')
-                                            <a
-                                                class="unset"
-                                                href="{{ route('customer.session.destroy') }}">
-                                                <span>{{ __('shop::app.header.logout') }}</span>
-                                            </a>
-                                        @endauth
-
-                                        @guest('customer')
-                                            <a
-                                                class="unset"
-                                                href="{{ route('customer.session.create') }}">
-                                                <span>{{ __('shop::app.customer.login-form.title') }}</span>
-                                            </a>
-                                        @endguest
-                                    </li>
-
-                                    <li>
-                                        @guest('customer')
-                                            <a
-                                                class="unset"
-                                                href="{{ route('customer.register.index') }}">
-                                                <span>{{ __('shop::app.header.sign-up') }}</span>
-                                            </a>
-                                        @endguest
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="wrapper" v-else-if="subCategory">
-                                <div class="drawer-section">
-                                    <i class="rango-arrow-left fs24 text-down-4" @click="toggleSubcategories('root')"></i>
-
-                                    <h4 class="display-inbl">@{{ subCategory.name }}</h4>
-
-                                    <i class="material-icons pull-right text-dark" @click="closeDrawer()">
-                                        cancel
-                                    </i>
-                                </div>
-
-                                <ul type="none">
-                                    <li
-                                        :key="index"
-                                        v-for="(nestedSubCategory, index) in subCategory.children">
-
-                                        <a
-                                            class="unset"
-                                            :href="`${$root.baseUrl}/${subCategory.slug}/${nestedSubCategory.slug}`">
-
-                                            <div class="category-logo">
-                                                <img
-                                                    class="category-icon"
-                                                    v-if="nestedSubCategory.category_icon_path"
-                                                    :src="`${$root.baseUrl}/storage/${nestedSubCategory.category_icon_path}`" />
-                                            </div>
-                                            <span>@{{ nestedSubCategory.name }}</span>
-                                        </a>
-
-                                        <ul
-                                            type="none"
-                                            class="nested-category"
-                                            v-if="nestedSubCategory.children && nestedSubCategory.children.length > 0">
-
-                                            <li
-                                                :key="`index-${Math.random()}`"
-                                                v-for="(thirdLevelCategory, index) in nestedSubCategory.children">
-                                                <a
-                                                    class="unset"
-                                                    :href="`${$root.baseUrl}/${subCategory.slug}/${nestedSubCategory.slug}/${thirdLevelCategory.slug}`">
-
-                                                    <div class="category-logo">
-                                                        <img
-                                                            class="category-icon"
-                                                            v-if="thirdLevelCategory.category_icon_path"
-                                                            :src="`${$root.baseUrl}/storage/${thirdLevelCategory.category_icon_path}`" />
-                                                    </div>
-                                                    <span>@{{ thirdLevelCategory.name }}</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="wrapper" v-else-if="languages">
-                                <div class="drawer-section">
-                                    <i class="rango-arrow-left fs24 text-down-4" @click="toggleMetaInfo('languages')"></i>
-                                    <h4 class="display-inbl">{{ __('velocity::app.responsive.header.languages') }}</h4>
-                                    <i class="material-icons pull-right text-dark" @click="closeDrawer()">cancel</i>
-                                </div>
-
-                                <ul type="none">
-                                    @foreach ($allLocales as $locale)
-                                        <li>
-                                            <a
-                                                class="unset"
-                                                @if (isset($serachQuery))
-                                                    href="?{{ $serachQuery }}&locale={{ $locale->code }}"
-                                                @else
-                                                    href="?locale={{ $locale->code }}"
-                                                @endif>
-
-                                                @if( $locale->code == 'en')
-                                                    <div class="category-logo">
-                                                        <img
-                                                        class="category-icon"
-                                                        src="{{ asset('/themes/velocity/assets/images/flags/en.png') }}" />
-                                                    </div>
-                                                @else
-
-                                                    <div class="category-logo">
-                                                        <img
-                                                        class="category-icon"
-                                                        src="{{ asset('/storage/' . $locale->locale_image) }}" />
-                                                    </div>
-                                                @endif
-
-                                                <span>
-                                                    {{ isset($serachQuery) ? $locale->title : $locale->name }}
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-
-                            <div class="wrapper" v-else-if="currencies">
-                                <div class="drawer-section">
-                                    <i class="rango-arrow-left fs24 text-down-4" @click="toggleMetaInfo('currencies')"></i>
-                                    <h4 class="display-inbl">{{ __('velocity::app.shop.general.currencies') }}</h4>
-                                    <i class="material-icons pull-right text-dark" @click="closeDrawer()">cancel</i>
-                                </div>
-
-                                <ul type="none">
-                                    @foreach ($allCurrency as $currency)
-                                        <li>
-                                            @if (isset($serachQuery))
-                                                <a
-                                                    class="unset"
-                                                    href="?{{ $serachQuery }}&locale={{ $currency->code }}">
-                                                    <span>{{ $currency->code }}</span>
-                                                </a>
-                                            @else
-                                                <a
-                                                    class="unset"
-                                                    href="?currency={{ $currency->code }}">
-                                                    <span>{{ $currency->code }}</span>
-                                                </a>
-                                            @endif
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="hamburger-wrapper" @click="toggleHamburger">
-                            <i class="rango-toggle hamburger"></i>
-                        </div>
-
-                        <logo-component></logo-component>
-                    </div>
-
-                    @php
-                        $showCompare = core()->getConfigData('general.content.shop.compare_option') == "1" ? true : false
-                    @endphp
-
-                    <div class="right-vc-header col-6">
-                        @if ($showCompare)
-                            <a
-                                class="compare-btn unset"
-                                @auth('customer')
-                                    href="{{ route('velocity.customer.product.compare') }}"
-                                @endauth
-
-                                @guest('customer')
-                                    href="{{ route('velocity.product.compare') }}"
-                                @endguest
-                                >
-
-                                <div class="badge-container" v-if="compareCount > 0">
-                                    <span class="badge" v-text="compareCount"></span>
-                                </div>
-                                <i class="material-icons">compare_arrows</i>
-                            </a>
-                        @endif
-
-                        <a class="wishlist-btn unset" :href="`${isCustomer ? '{{ route('customer.wishlist.index') }}' : '{{ route('velocity.product.guest-wishlist') }}'}`">
-                            <div class="badge-container" v-if="wishlistCount > 0">
-                                <span class="badge" v-text="wishlistCount"></span>
-                            </div>
-                            <i class="material-icons">favorite_border</i>
-                        </a>
-
-                        <a class="unset cursor-pointer" @click="openSearchBar">
-                            <i class="material-icons">search</i>
-                        </a>
-
-                        <a href="{{ route('shop.checkout.cart.index') }}" class="unset">
-                            <div class="badge-wrapper">
-                                <span class="badge">@{{ cartItemsCount }}</span>
-                            </div>
-                            <i class="material-icons text-down-3">shopping_cart</i>
-                        </a>
-                    </div>
-
-                    <searchbar-component v-if="isSearchbar"></searchbar-component>
-                </div>
-            </div>
+            
            
-            <!-- <div
-                v-else
-                @mouseout="toggleSidebar('0', $event, 'mouseout')"
-                @mouseover="toggleSidebar('0', $event, 'mouseover')"
-                :class="`main-category fs16 unselectable fw6 ${($root.sharedRootCategories.length > 0) ? 'cursor-pointer' : 'cursor-not-allowed'} left`">
-
-                <i class="rango-view-list text-down-4 align-vertical-top fs18">
-                </i>
-                <span
-                    class="pl5"
-                    v-text="heading"
-                    @mouseover="toggleSidebar('0', $event, 'mouseover')">
-                </span>
-            </div> -->
+        
             <div class="header__inner">
-            <logo-component></logo-component>
+                <a class="header__trigger" title="Toggle Menu" v-on:click="toggleHamburger()">
+                    <span class="header__trigger__hamburger"></span>
+                </a>
+                <logo-component></logo-component>
                 <nav class="menu">
-                    
+                
+                <a class="header__trigger" title="Toggle Menu" v-on:click="toggleHamburger()">
+<span class="header__trigger__hamburger"></span>
+</a>
                         <ul id="menu-main-menu" class="menu__ul">
                             <li v-for="(content, index) in headerContent" :key="index" class="menu-item menu-item-type-post_type menu-item-object-page menu__ul__li">
                                 <a
@@ -411,161 +38,204 @@
                                 </a>
                             </li>
                         </ul>
-                    
-                </nav>
-              
-                {!! view_render_event('bagisto.shop.layout.header.cart-item.before') !!}
-                    @include('shop::checkout.cart.mini-cart')
-                {!! view_render_event('bagisto.shop.layout.header.cart-item.after') !!}
+                        <nav class="user-controls">
+                            <ul class="user-controls__ul">
+                                <li class="user-controls__ul__li user-controls__ul__li--search">
+                                <form role="search" method="get" id="search" class="search" action="/">
+                                <input type="text" class="search__input" value="" name="s" id="s" required="">
+                                <label for="s" class="search__label">Search</label>
+                                <input type="image" class="search__button" id="searchsubmit" src="https://camposcoffee.com/wp-content/themes/campos-codeshare/assets/images/icons/search.svg">
+                                </form>
+                                </li>
+                                <li class="user-controls__ul__li user-controls__ul__li--account">
+                                <a class="user-controls__ul__li__a" href="https://camposcoffee.com/my-account/">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="18" viewBox="0 0 17 18" class="injected-svg svg-icon user-controls__ul__li__a__icon" data-src="https://camposcoffee.com/wp-content/themes/campos-codeshare/assets/images/icons/login.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M8.237 1.029a3.883 3.883 0 0 0-3.88 3.878c0 2.14 1.741 3.88 3.88 3.88s3.879-1.74 3.879-3.88a3.883 3.883 0 0 0-3.88-3.878m0 8.786A4.913 4.913 0 0 1 3.33 4.907 4.913 4.913 0 0 1 8.237 0a4.913 4.913 0 0 1 4.907 4.907 4.913 4.913 0 0 1-4.907 4.908"></path><path d="M1.047 16.509h14.38c-.265-3.735-3.388-6.694-7.19-6.694-3.802 0-6.925 2.959-7.19 6.694m14.912 1.028H.514A.514.514 0 0 1 0 17.023c0-4.541 3.695-8.237 8.236-8.237 4.543 0 8.238 3.696 8.238 8.237 0 .284-.23.514-.515.514"></path></svg>
+                                <span class="user-controls__ul__li__a__label">Log in or Register</span>
+                                </a>
+                                </li>
+                            
+                            </ul>
+                        </nav>
+                        
+</nav>
 
-              
-                
+{!! view_render_event('bagisto.shop.layout.header.cart-item.before') !!}
+@include('shop::checkout.cart.mini-cart')
+{!! view_render_event('bagisto.shop.layout.header.cart-item.after') !!}
 
+
+<div class="menu__region-toggle">
+    <div class="menu__region-toggle__inner">
+        
+            <ul class="menu__region-toggle__inner__ul">
+                @php
+                $localeImage = null;
                 
-          
-              
+                @endphp
+                @foreach (core()->getCurrentChannel()->locales as $locale)
+                <li class="menu__region-toggle__inner__ul__li">
+                    <a class="menu__region-toggle__inner__ul__li__a" href="/?locale={{ $locale->code }}">
+                        <img src="{{ asset('/storage/' . $locale->locale_image) }}" width="24" class="menu__region-toggle__inner__ul__li__a__flag">
+                        {{ $locale->name}} 
+                    </a>
+
+                </li>
+                @if (app()->getLocale() == $locale->code)
+                    @php
+                    $localeImage = $locale->locale_image;
+                    @endphp
+                @endif
+                @endforeach
+            </ul>
+            <div class="menu__region-toggle__inner__current">    
+                
+                <img  src="{{ asset('/storage/' . $localeImage) }}" width="24"  class="menu__region-toggle__inner__current__flag">
             </div>
-        </header>
-    </script>
+        </div>
+    </div>
+</div>
+
+</header>
+</script>
 @endpush
 
 @php
-    $cart = cart()->getCart();
+$cart = cart()->getCart();
 
-    $cartItemsCount = trans('shop::app.minicart.zero');
+$cartItemsCount = trans('shop::app.minicart.zero');
 
-    if ($cart) {
-        $cartItemsCount = $cart->items->count();
-    }
+if ($cart) {
+$cartItemsCount = $cart->items->count();
+}
 @endphp
 
 @push('scripts')
-    <script type="text/javascript">
-        (() => {
-          
-            Vue.component('content-header', {
-                template: '#content-header-template',
-                props: [
-                    'heading',
-                    'headerContent',
-                    'categoryCount',
-                ],
+<script type="text/javascript">
+    (() => {
 
-                data: function () {
-                    return {
-                        'compareCount': 0,
-                        'wishlistCount': 0,
-                        'languages': false,
-                        'hamburger': false,
-                        'currencies': false,
-                        'subCategory': null,
-                        'isSearchbar': false,
-                        'rootCategories': true,
-                        'cartItemsCount': '{{ $cartItemsCount }}',
-                        'rootCategoriesCollection': this.$root.sharedRootCategories,
-                        'isCustomer': '{{ auth()->guard('customer')->user() ? "true" : "false" }}' == "true",
+        Vue.component('content-header', {
+            template: '#content-header-template',
+            props: [
+                'heading',
+                'headerContent',
+                'categoryCount',
+            ],
+
+            data: function () {
+                return {
+                    'compareCount': 0,
+                    'wishlistCount': 0,
+                    'languages': false,
+                    'hamburger': false,
+                    'currencies': false,
+                    'subCategory': null,
+                    'isSearchbar': false,
+                    'rootCategories': true,
+                    'cartItemsCount': '{{ $cartItemsCount }}',
+                    'rootCategoriesCollection': this.$root.sharedRootCategories,
+                    'isCustomer': '{{ auth()->guard('customer')->user() ? "true" : "false" }}' == "true",
+                }
+            },
+
+            watch: {
+                hamburger: function (value) {
+                    if (value) {
+                        document.body.classList.add('header--open');
+                    } else {
+                        document.body.classList.remove('header--open');
                     }
                 },
 
-                watch: {
-                    hamburger: function (value) {
-                        if (value) {
-                            document.body.classList.add('open-hamburger');
-                        } else {
-                            document.body.classList.remove('open-hamburger');
-                        }
-                    },
-
-                    '$root.headerItemsCount': function () {
-                        this.updateHeaderItemsCount();
-                    },
-
-                    '$root.miniCartKey': function () {
-                        this.getMiniCartDetails();
-                    },
-
-                    '$root.sharedRootCategories': function (categories) {
-                        this.formatCategories(categories);
-                    }
-                },
-
-                created: function () {
-                    this.getMiniCartDetails();
+                '$root.headerItemsCount': function () {
                     this.updateHeaderItemsCount();
                 },
 
-                methods: {
-                    openSearchBar: function () {
-                        this.isSearchbar = !this.isSearchbar;
+                '$root.miniCartKey': function () {
+                    this.getMiniCartDetails();
+                },
 
-                        let footer = $('.footer');
-                        let homeContent = $('#home-right-bar-container');
+                '$root.sharedRootCategories': function (categories) {
+                    this.formatCategories(categories);
+                }
+            },
 
-                        if (this.isSearchbar) {
-                            footer[0].style.opacity = '.3';
-                            homeContent[0].style.opacity = '.3';
-                        } else {
-                            footer[0].style.opacity = '1';
-                            homeContent[0].style.opacity = '1';
-                        }
-                    },
+            created: function () {
+                this.getMiniCartDetails();
+                this.updateHeaderItemsCount();
+            },
 
-                    toggleHamburger: function () {
-                        this.hamburger = !this.hamburger;
-                    },
+            methods: {
+                openSearchBar: function () {
+                    this.isSearchbar = !this.isSearchbar;
 
-                    closeDrawer: function() {
-                        $('.nav-container').hide();
+                    let footer = $('.footer');
+                    let homeContent = $('#home-right-bar-container');
 
-                        this.toggleHamburger();
+                    if (this.isSearchbar) {
+                        footer[0].style.opacity = '.3';
+                        homeContent[0].style.opacity = '.3';
+                    } else {
+                        footer[0].style.opacity = '1';
+                        homeContent[0].style.opacity = '1';
+                    }
+                },
+
+                toggleHamburger: function () {
+                    this.hamburger = !this.hamburger;
+                },
+
+                closeDrawer: function () {
+                    $('.nav-container').hide();
+
+                    this.toggleHamburger();
+                    this.rootCategories = true;
+                },
+
+                toggleSubcategories: function (index, event) {
+                    if (index == "root") {
                         this.rootCategories = true;
-                    },
+                        this.subCategory = false;
+                    } else {
+                        event.preventDefault();
 
-                    toggleSubcategories: function (index, event) {
-                        if (index == "root") {
-                            this.rootCategories = true;
-                            this.subCategory = false;
-                        } else {
-                            event.preventDefault();
+                        let categories = this.$root.sharedRootCategories;
+                        this.rootCategories = false;
+                        this.subCategory = categories[index];
+                    }
+                },
 
-                            let categories = this.$root.sharedRootCategories;
-                            this.rootCategories = false;
-                            this.subCategory = categories[index];
+                toggleMetaInfo: function (metaKey) {
+                    this.rootCategories = !this.rootCategories;
+
+                    this[metaKey] = !this[metaKey];
+                },
+
+                updateHeaderItemsCount: function () {
+                    if (!this.isCustomer) {
+                        let comparedItems = this.getStorageValue('compared_product');
+                        let wishlistedItems = this.getStorageValue('wishlist_product');
+
+                        if (wishlistedItems) {
+                            this.wishlistCount = wishlistedItems.length;
                         }
-                    },
 
-                    toggleMetaInfo: function (metaKey) {
-                        this.rootCategories = ! this.rootCategories;
-
-                        this[metaKey] = !this[metaKey];
-                    },
-
-                    updateHeaderItemsCount: function () {
-                        if (! this.isCustomer) {
-                            let comparedItems = this.getStorageValue('compared_product');
-                            let wishlistedItems = this.getStorageValue('wishlist_product');
-
-                            if (wishlistedItems) {
-                                this.wishlistCount = wishlistedItems.length;
-                            }
-
-                            if (comparedItems) {
-                                this.compareCount = comparedItems.length;
-                            }
-                        } else {
-                            this.$http.get(`${this.$root.baseUrl}/items-count`)
-                                .then(response => {
-                                    this.compareCount = response.data.compareProductsCount;
-                                    this.wishlistCount = response.data.wishlistedProductsCount;
-                                })
-                                .catch(exception => {
-                                    console.log(this.__('error.something_went_wrong'));
-                                });
+                        if (comparedItems) {
+                            this.compareCount = comparedItems.length;
                         }
-                    },
+                    } else {
+                        this.$http.get(`${this.$root.baseUrl}/items-count`)
+                            .then(response => {
+                                this.compareCount = response.data.compareProductsCount;
+                                this.wishlistCount = response.data.wishlistedProductsCount;
+                            })
+                            .catch(exception => {
+                                console.log(this.__('error.something_went_wrong'));
+                            });
+                    }
+                },
 
-                    getMiniCartDetails: function () {
-                        this.$http.get(`${this.$root.baseUrl}/mini-cart`)
+                getMiniCartDetails: function () {
+                    this.$http.get(`${this.$root.baseUrl}/mini-cart`)
                         .then(response => {
                             if (response.data.status) {
                                 this.cartItemsCount = response.data.mini_cart.cart_items.length;
@@ -574,23 +244,23 @@
                         .catch(exception => {
                             console.log(this.__('error.something_went_wrong'));
                         });
-                    },
-
-                    formatCategories: function (categories) {
-                        let slicedCategories = categories;
-                        let categoryCount = this.categoryCount ? this.categoryCount : 9;
-
-                        if (
-                            slicedCategories
-                            && slicedCategories.length > categoryCount
-                        ) {
-                            slicedCategories = categories.slice(0, categoryCount);
-                        }
-
-                        this.rootCategoriesCollection = slicedCategories;
-                    },
                 },
-            });
-        })()
-    </script>
+
+                formatCategories: function (categories) {
+                    let slicedCategories = categories;
+                    let categoryCount = this.categoryCount ? this.categoryCount : 9;
+
+                    if (
+                        slicedCategories
+                        && slicedCategories.length > categoryCount
+                    ) {
+                        slicedCategories = categories.slice(0, categoryCount);
+                    }
+
+                    this.rootCategoriesCollection = slicedCategories;
+                },
+            },
+        });
+    })()
+</script>
 @endpush

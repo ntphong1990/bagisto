@@ -46,6 +46,11 @@
             font-size: 18px;
             font-weight: 600;
         }
+        .VueCarousel-wrapper {
+    width: 100%;
+    position: relative;
+    overflow: initial !important;
+}
     </style>
 @endpush
 
@@ -69,6 +74,7 @@
             @endif
 
         {{ view_render_event('bagisto.shop.home.content.after') }}
+      
     </div>
 
 @endsection
