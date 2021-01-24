@@ -630,9 +630,9 @@
         <!-- <div class="image">
             <img class="logo" width="100" src="{{ Storage::url(core()->getConfigData('sales.orderSettings.invoice_slip_design.logo')) }}"/>
         </div> -->
-        <p style="font-size:20px;font-weight:700;margin:4px">Wanderlust</p>
+        <p style="font-size:20px;font-weight:700;margin:4px">Wanderlust Design</p>
 
-        <p style="margin:4px">Địa chỉ: 39/7 Đỗ Quang Đẩu, Quận 1, Hồ Chí Minh</p>
+        <p style="margin:4px">Địa chỉ: Lầu 1, 39/7 Đỗ Quang Đẩu, Quận 1, Hồ Chí Minh</p>
         <p style="margin:4px">Hotline: 0979509139</p>
         <br />
         <p style="margin:4px;font-size:16px;font-weight:700;text-align: center;">HOÁ ĐƠN BÁN HÀNG</p>
@@ -641,7 +641,7 @@
         <p style="margin:4px">Ngày: {{ $order->created_at->format('d-m-Y h:i')}}</p>
         <p style="margin:4px">HD: #{{$order->increment_id}}</p>
         <p style="margin:4px">Khách hàng: {{$order->customer_full_name}}</p>
-        <p style="margin:4px">SDT: {{$order->customer_phone}}</p>
+        <p style="margin:4px">SDT: {{$order->billing_address->phone}}</p>
         <div class="table">
             <table>
                 <thead>
@@ -698,7 +698,7 @@
                 <tr>
                     <td style="text-align:right">Phí vận chuyển</td>
                     <td>-</td>
-                    <td style="text-align:right;padding-right:8px">{{number_format($order->base_shipping_amount)}}</td>
+                    <td style="text-align:right;padding-right:8px">{{number_format($order->shipping_amount)}}</td>
                 </tr>
                 <tr class="border">
                     <td style="text-align:right">Tổng tiền</td>
@@ -709,8 +709,8 @@
             </tbody>
         </table>
         <br />
-        <p>Cảm ơn sự ủng hộ của quý khách !!</p>
-        <i>*Vui lòng giữ hoá đơn trong trường hợp muốn đổi trả, thời hạn 30 ngày.</i>
+        <i>Cảm ơn bạn đã chọn Wanderlust Design !!!</i>
+
 
     </div>
 </div>
