@@ -55,7 +55,7 @@
                 href="{{ route('shop.home.index') }}">
 
                 @if ($logo = core()->getCurrentChannel()->logo_url)
-                    <img class="logo" src="{{ $logo }}" width="40" />
+                    <img class="logo" src="{{ $logo }}" width="120" />
                 @else
                     <img class="logo" src="{{ asset('themes/velocity/assets/images/logo-text.png') }}" />
                 @endif
