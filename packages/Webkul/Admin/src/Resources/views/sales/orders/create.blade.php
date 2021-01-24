@@ -70,8 +70,8 @@
                                 </div>
                                 </div>
                                 <div class="control-group" :class="[errors.has('address') ? 'has-error' : '']">
-                                    <label for="phone" class="required">Address</label>
-                                    <input type="text" class="control" placeholder="Enter address" name="address" v-validate="'required'" v-model="order.billing_address.address1">
+                                    <label for="phone" >Address</label>
+                                    <input type="text" class="control" placeholder="Enter address" name="address"  v-model="order.billing_address.address1">
                                     <span class="control-error" v-if="errors.has('address')">@{{ errors.first('address') }}</span>
                                 </div>
                                 <!-- <div class="row">
@@ -136,7 +136,7 @@
                             <div class="profile-info">
                                 <input autocomplete="off" type="text" class="control dropdown-toggle" name="first_name" placeholder="Enter product SKU or name" >
                                 <div class="dropdown-list bottom" style="width:100%; display: none;">
-                                    <div class="dropdown-container">
+                                    <div class="dropdown-container" style="height:50vh">
                                         <ul >
                                             <li v-for="product in products" class="row ">
 
