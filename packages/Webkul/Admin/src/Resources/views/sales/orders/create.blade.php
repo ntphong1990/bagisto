@@ -134,23 +134,23 @@
                         <div class="control-group" :class="[errors.has('first_name') ? 'has-error' : '']">
 
                             <div class="profile-info">
-                                <input autocomplete="off" type="text" class="control dropdown-toggle" name="first_name" placeholder="Enter product SKU or name" >
+                                <input autocomplete="off" type="text" class="control dropdown-toggle" v-model="search_key" placeholder="Enter product SKU or name" >
                                 <div class="dropdown-list bottom" style="width:100%; display: none;">
                                     <div class="dropdown-container" style="height:50vh">
                                         <ul >
                                             <li v-for="product in products" class="row ">
 
-                                                <div class="col-12" style="width:100%">
+                                                <div class="col-12" style="width:100%" v-if="product.url_key.indexOf(search_key) > -1">
                                                     <div class="row">
                                                         <label class="inline_block ml10" data-bind="text:Value" v-html="product.name"></label>
-                                                        <div class="">
+                                                        <div class="" v-if="product.images.length > 0">
                                                             <img class="thumb-image" :src="product.images[0].url" style="width:50px">
                                                         </div>
                                                     </div>
                                                     <ul class="list-group" v-if="product.variants.length > 0">
                                                         <li v-for="variant in product.variants" class="list-group-item list-group-item-action product-variant" v-on:click="addItem(variant,product)">
                                                             <a class="color_green pull-left" style="pointer-events:none">
-                                                                <span  v-html="variant.color_label + ' ' + variant.size_label"></span>
+                                                                <span  v-html="variant.color_label + ' / ' + variant.size_label"></span>
                                                             </a>
                                                             <div class="pull-right" style="pointer-events:none">
 
@@ -413,6 +413,7 @@
         data: function() {
             return {
                 products: [],
+                search_key:"",
                 loading:false,
                 order: {
                     "customer_id": null,
