@@ -625,7 +625,7 @@
     display: block;
     margin: 0 auto;
     margin-bottom: 0.5cm;
-    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: inherit;line-height:14px;font-weight: 600;">
+    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: visible;line-height:14px;font-weight: 600;">
     <div style="padding:8px">
         <!-- <div class="image">
             <img class="logo" width="100" src="{{ Storage::url(core()->getConfigData('sales.orderSettings.invoice_slip_design.logo')) }}"/>
