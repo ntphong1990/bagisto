@@ -625,30 +625,30 @@
     display: block;
     margin: 0 auto;
     margin-bottom: 0.5cm;
-    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: hidden;line-height:12px;">
+    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: inherit;line-height:14px;font-weight: 600;">
     <div style="padding:8px">
         <!-- <div class="image">
             <img class="logo" width="100" src="{{ Storage::url(core()->getConfigData('sales.orderSettings.invoice_slip_design.logo')) }}"/>
         </div> -->
-        <p style="font-size:16px;font-weight:700;margin:4px">Wanderlust Design</p>
+        <p style="font-size:16px;font-weight:900;margin:4px">Wanderlust Design</p>
 
-        <p style="margin:4px;font-size:10px;">Địa chỉ: Lầu 1, 39/7 Đỗ Quang Đẩu, Quận 1, Hồ Chí Minh</p>
-        <p style="margin:4px;font-size:10px;">Hotline: 0979509139</p>
+        <p style="margin:4px;font-size:12px;">Địa chỉ: Lầu 1, 39/7 Đỗ Quang Đẩu, Quận 1, Hồ Chí Minh</p>
+        <p style="margin:4px;font-size:12px;">Hotline: 0979509139</p>
         <br />
-        <p style="margin:4px;font-size:12px;font-weight:700;text-align: center;">HOÁ ĐƠN BÁN HÀNG</p>
+        <p style="margin:4px;font-size:12px;font-weight:900;text-align: center;">HOÁ ĐƠN BÁN HÀNG</p>
 
         <br />
-        <p style="margin:4px;font-size:10px;">Ngày: {{ $order->created_at->format('d-m-Y h:i')}}</p>
-        <p style="margin:4px;font-size:10px;">HD: #{{$order->increment_id}}</p>
-        <p style="margin:4px;font-size:10px;">Khách hàng: {{$order->customer_full_name}}</p>
-        <p style="margin:4px;font-size:10px;">SDT: {{$order->billing_address->phone}}</p>
+        <p style="margin:4px;font-size:12px;">Ngày: {{ $order->created_at->format('d-m-Y h:i')}}</p>
+        <p style="margin:4px;font-size:12px;">HD: #{{$order->increment_id}}</p>
+        <p style="margin:4px;font-size:12px;">Khách hàng: {{$order->customer_full_name}}</p>
+        <p style="margin:4px;font-size:12px;">SDT: {{$order->billing_address->phone}}</p>
         <div class="table">
             <table>
                 <thead>
                     <tr>
-                        <th style="text-align:left;font-size:10px;">Giá</th>
-                        <th style="text-align:right;font-size:10px;">SL</th>
-                        <th style="text-align:right;font-size:10px;">Thành tiền</th>
+                        <th style="text-align:left;font-size:12px;">Giá</th>
+                        <th style="text-align:right;font-size:12px;">SL</th>
+                        <th style="text-align:right;font-size:12px;">Thành tiền</th>
 
                     </tr>
                 </thead>
@@ -658,7 +658,7 @@
                     @foreach ($order->items as $item)
 
                     <tr>
-                        <td colspan="3" style="border-bottom: none;padding:2px;padding-left:10px;font-size:10px;">{{
+                        <td colspan="3" style="border-bottom: none;padding:2px;padding-left:10px;font-size:12px;">{{
                             $item->name }}</td>
                     </tr>
                     <tr style="border-bottom: 1px solid #000;">
@@ -668,17 +668,17 @@
 
 
 
-                        <td style="border-bottom: none;text-align:left;padding:2px;padding-left:10px;font-size:10px;">{{
+                        <td style="border-bottom: none;text-align:left;padding:2px;padding-left:10px;font-size:12px;">{{
                             number_format($item->base_price) }}</td>
 
-                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:10px;">
+                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:12px;">
 
                             {{$item->qty_ordered}}
 
 
                         </td>
 
-                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:10px;">
+                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:12px;">
                             {{
                             number_format($item->base_total) }}</td>
 
@@ -693,21 +693,21 @@
         <table class="sale-summary" style="width: 100%;">
             <tbody>
                 <tr>
-                    <td style="text-align:right;font-size:10px;">Tạm tính</td>
+                    <td style="text-align:right;font-size:12px;">Tạm tính</td>
                     <td>-</td>
-                    <td style="text-align:right;padding-right:8px;font-size:10px;">
+                    <td style="text-align:right;padding-right:8px;font-size:12px;">
                         {{number_format($order->base_sub_total)}}</td>
                 </tr>
                 <tr>
-                    <td style="text-align:right;font-size:10px;">Phí vận chuyển</td>
+                    <td style="text-align:right;font-size:12px;">Phí vận chuyển</td>
                     <td>-</td>
-                    <td style="text-align:right;padding-right:8px;font-size:10px;">
+                    <td style="text-align:right;padding-right:8px;font-size:12px;">
                         {{number_format($order->shipping_amount)}}</td>
                 </tr>
                 <tr class="border">
-                    <td style="text-align:right;font-size:10px;">Tổng tiền</td>
+                    <td style="text-align:right;font-size:12px;">Tổng tiền</td>
                     <td>-</td>
-                    <td style="text-align:right;padding-right:8px;font-size:10px;">
+                    <td style="text-align:right;padding-right:8px;font-size:12px;">
                         {{number_format($order->base_grand_total)}}</td>
                 </tr>
 
