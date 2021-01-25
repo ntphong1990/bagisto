@@ -621,34 +621,34 @@
     </div>
 
 </div>
-<div id="printableArea" size=" width: 72.14cm;height: 29.7cm;" style=" width: 7.214cm;height: 29.7cm;background: white;
+<div id="printableArea" size=" width: 72.14cm;height: 29.7cm;" style=" width: 5.8cm;height: 29.7cm;background: white;
     display: block;
     margin: 0 auto;
     margin-bottom: 0.5cm;
-    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: hidden;">
+    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: hidden;line-height:12px;">
     <div style="padding:8px">
         <!-- <div class="image">
             <img class="logo" width="100" src="{{ Storage::url(core()->getConfigData('sales.orderSettings.invoice_slip_design.logo')) }}"/>
         </div> -->
-        <p style="font-size:20px;font-weight:700;margin:4px">Wanderlust Design</p>
+        <p style="font-size:16px;font-weight:700;margin:4px">Wanderlust Design</p>
 
-        <p style="margin:4px">Địa chỉ: Lầu 1, 39/7 Đỗ Quang Đẩu, Quận 1, Hồ Chí Minh</p>
-        <p style="margin:4px">Hotline: 0979509139</p>
+        <p style="margin:4px;font-size:10px;">Địa chỉ: Lầu 1, 39/7 Đỗ Quang Đẩu, Quận 1, Hồ Chí Minh</p>
+        <p style="margin:4px;font-size:10px;">Hotline: 0979509139</p>
         <br />
-        <p style="margin:4px;font-size:16px;font-weight:700;text-align: center;">HOÁ ĐƠN BÁN HÀNG</p>
+        <p style="margin:4px;font-size:12px;font-weight:700;text-align: center;">HOÁ ĐƠN BÁN HÀNG</p>
 
         <br />
-        <p style="margin:4px">Ngày: {{ $order->created_at->format('d-m-Y h:i')}}</p>
-        <p style="margin:4px">HD: #{{$order->increment_id}}</p>
-        <p style="margin:4px">Khách hàng: {{$order->customer_full_name}}</p>
-        <p style="margin:4px">SDT: {{$order->billing_address->phone}}</p>
+        <p style="margin:4px;font-size:10px;">Ngày: {{ $order->created_at->format('d-m-Y h:i')}}</p>
+        <p style="margin:4px;font-size:10px;">HD: #{{$order->increment_id}}</p>
+        <p style="margin:4px;font-size:10px;">Khách hàng: {{$order->customer_full_name}}</p>
+        <p style="margin:4px;font-size:10px;">SDT: {{$order->billing_address->phone}}</p>
         <div class="table">
             <table>
                 <thead>
                     <tr>
-                        <th style="text-align:left">Giá</th>
-                        <th style="text-align:right">SL</th>
-                        <th style="text-align:right">Thành tiền</th>
+                        <th style="text-align:left;font-size:10px;">Giá</th>
+                        <th style="text-align:right;font-size:10px;">SL</th>
+                        <th style="text-align:right;font-size:10px;">Thành tiền</th>
 
                     </tr>
                 </thead>
@@ -658,7 +658,8 @@
                     @foreach ($order->items as $item)
 
                     <tr>
-                        <td colspan="3" style="border-bottom: none;padding:2px;padding-left:10px">{{ $item->name }}</td>
+                        <td colspan="3" style="border-bottom: none;padding:2px;padding-left:10px;font-size:10px;">{{
+                            $item->name }}</td>
                     </tr>
                     <tr style="border-bottom: 1px solid #000;">
 
@@ -667,17 +668,18 @@
 
 
 
-                        <td style="border-bottom: none;text-align:left;padding:2px;padding-left:10px">{{
+                        <td style="border-bottom: none;text-align:left;padding:2px;padding-left:10px;font-size:10px;">{{
                             number_format($item->base_price) }}</td>
 
-                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px">
+                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:10px;">
 
                             {{$item->qty_ordered}}
 
 
                         </td>
 
-                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px">{{
+                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:10px;">
+                            {{
                             number_format($item->base_total) }}</td>
 
 
@@ -691,25 +693,28 @@
         <table class="sale-summary" style="width: 100%;">
             <tbody>
                 <tr>
-                    <td style="text-align:right">Tạm tính</td>
+                    <td style="text-align:right;font-size:10px;">Tạm tính</td>
                     <td>-</td>
-                    <td style="text-align:right;padding-right:8px">{{number_format($order->base_sub_total)}}</td>
+                    <td style="text-align:right;padding-right:8px;font-size:10px;">
+                        {{number_format($order->base_sub_total)}}</td>
                 </tr>
                 <tr>
-                    <td style="text-align:right">Phí vận chuyển</td>
+                    <td style="text-align:right;font-size:10px;">Phí vận chuyển</td>
                     <td>-</td>
-                    <td style="text-align:right;padding-right:8px">{{number_format($order->shipping_amount)}}</td>
+                    <td style="text-align:right;padding-right:8px;font-size:10px;">
+                        {{number_format($order->shipping_amount)}}</td>
                 </tr>
                 <tr class="border">
-                    <td style="text-align:right">Tổng tiền</td>
+                    <td style="text-align:right;font-size:10px;">Tổng tiền</td>
                     <td>-</td>
-                    <td style="text-align:right;padding-right:8px">{{number_format($order->base_grand_total)}}</td>
+                    <td style="text-align:right;padding-right:8px;font-size:10px;">
+                        {{number_format($order->base_grand_total)}}</td>
                 </tr>
 
             </tbody>
         </table>
         <br />
-        <i>Cảm ơn bạn đã chọn Wanderlust Design !!!</i>
+        <i style="font-size:12px;">Cảm ơn bạn đã chọn Wanderlust Design !!!</i>
 
 
     </div>
