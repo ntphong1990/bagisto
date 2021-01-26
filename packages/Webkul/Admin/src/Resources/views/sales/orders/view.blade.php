@@ -50,6 +50,8 @@
                 {{ __('admin::app.sales.orders.shipment-btn-title') }}
             </a>
             @endif
+
+
             <a class="btn btn-lg btn-primary" onclick="printDiv('printableArea')">
                 {{ __('admin::app.sales.invoices.print') }}
             </a>
@@ -625,8 +627,8 @@
     display: block;
     margin: 0 auto;
     margin-bottom: 0.5cm;
-    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: hidden;">
-    <div style="padding:8px;line-height:14px;font-weight: 600;">
+    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: inherit;">
+    <div style="padding:8px;line-height:14px;font-weight: 600;font-family: Roboto, system-ui, sans-serif;">
         <!-- <div class="image">
             <img class="logo" width="100" src="{{ Storage::url(core()->getConfigData('sales.orderSettings.invoice_slip_design.logo')) }}"/>
         </div> -->
