@@ -627,7 +627,7 @@
     display: block;
     margin: 0 auto;
     margin-bottom: 0.5cm;
-    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: inherit;">
+    box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);visibility: hidden;">
     <div style="padding:8px;line-height:14px;font-weight: 600;font-family: Roboto, system-ui, sans-serif;color:black">
         <!-- <div class="image">
             <img class="logo" width="100" src="{{ Storage::url(core()->getConfigData('sales.orderSettings.invoice_slip_design.logo')) }}"/>
@@ -645,12 +645,12 @@
         <p style="margin:4px;font-size:12px;">Khách hàng: {{$order->customer_full_name}}</p>
         <p style="margin:4px;font-size:12px;">SDT: {{$order->billing_address->phone}}</p>
         <div class="table">
-            <table>
+            <table style="color:black">
                 <thead>
                     <tr>
-                        <th style="text-align:left;font-size:12px;">Giá</th>
-                        <th style="text-align:right;font-size:12px;">SL</th>
-                        <th style="text-align:right;font-size:12px;">Thành tiền</th>
+                        <th style="text-align:left;font-size:12px;color:black">Giá</th>
+                        <th style="text-align:right;font-size:12px;color:black">SL</th>
+                        <th style="text-align:right;font-size:12px;color:black">Thành tiền</th>
 
                     </tr>
                 </thead>
@@ -660,7 +660,8 @@
                     @foreach ($order->items as $item)
 
                     <tr>
-                        <td colspan="3" style="border-bottom: none;padding:2px;padding-left:10px;font-size:12px;">{{
+                        <td colspan="3"
+                            style="border-bottom: none;padding:2px;padding-left:10px;font-size:12px;color:black">{{
                             $item->name }}</td>
                     </tr>
                     <tr style="border-bottom: 1px solid #000;">
@@ -670,17 +671,21 @@
 
 
 
-                        <td style="border-bottom: none;text-align:left;padding:2px;padding-left:10px;font-size:12px;">{{
+                        <td
+                            style="border-bottom: none;text-align:left;padding:2px;padding-left:10px;font-size:12px;color:black">
+                            {{
                             number_format($item->base_price) }}</td>
 
-                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:12px;">
+                        <td
+                            style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:12px;color:black">
 
                             {{$item->qty_ordered}}
 
 
                         </td>
 
-                        <td style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:12px;">
+                        <td
+                            style="border-bottom: none;text-align:right;padding:2px;padding-right:10px;font-size:12px;color:black">
                             {{
                             number_format($item->base_total) }}</td>
 
