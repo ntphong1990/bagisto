@@ -140,7 +140,7 @@
                                         <ul >
                                             <li v-for="product in products" class="row" style="padding:0px">
 
-                                                <div class="col-12" style="width:100%" v-if="product.url_key.indexOf(search_key) > -1">
+                                                <div class="col-12" style="width:100%" v-if="product.url_key.indexOf(search_key) > -1 || product.search_name.indexOf(search_key) >-1">
                                                     <div class="row">
                                                         <label class="inline_block ml10" data-bind="text:Value" v-html="product.name"></label>
                                                         <div class="" v-if="product.images.length > 0">
@@ -242,8 +242,10 @@
                                 
                                 <tr>
                                     <td>
-                                        {{ __('admin::app.sales.orders.discount') }}
-
+                                        <a hred="#" style="font-weight: 400;
+    color: #007bff;
+    background-color: transparent;cursor: pointer;">{{ __('admin::app.sales.orders.discount') }}+</a>
+                                        
                                        
                                     </td>
                                     <td>-</td>
@@ -520,6 +522,7 @@
             axios.get('/api/products').then(function(response) {
                 response.data.data.forEach(element => {
                     element.url_key = element.url_key.replaceAll('-', ' ');
+                    element.search_name = element.name.toLowerCase();
                 });
                 vm.products = response.data.data;
             });
