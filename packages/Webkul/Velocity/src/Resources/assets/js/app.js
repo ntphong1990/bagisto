@@ -67,7 +67,7 @@ $(document).ready(function () {
                 'sharedRootCategories': [],
                 'responsiveSidebarTemplate': '',
                 'responsiveSidebarKey': Math.random(),
-                'baseUrl': document.querySelector("script[src$='velocity.js']").getAttribute('baseUrl')
+                'baseUrl': location.protocol + "//" + location.host
             }
         },
 
@@ -76,13 +76,13 @@ $(document).ready(function () {
                 route ? window.location.href = route : '';
             },
 
-            debounceToggleSidebar: function (id, {target}, type) {
+            debounceToggleSidebar: function (id, { target }, type) {
                 // setTimeout(() => {
-                    this.toggleSidebar(id, target, type);
+                this.toggleSidebar(id, target, type);
                 // }, 500);
             },
 
-            toggleSidebar: function (id, {target}, type) {
+            toggleSidebar: function (id, { target }, type) {
                 if (
                     Array.from(target.classList)[0] == "main-category"
                     || Array.from(target.parentElement.classList)[0] == "main-category"
@@ -96,11 +96,11 @@ $(document).ready(function () {
                         }
                     }
                 } else if (
-                    Array.from(target.classList)[0]     == "category"
-                    || Array.from(target.classList)[0]  == "category-icon"
-                    || Array.from(target.classList)[0]  == "category-title"
-                    || Array.from(target.classList)[0]  == "category-content"
-                    || Array.from(target.classList)[0]  == "rango-arrow-right"
+                    Array.from(target.classList)[0] == "category"
+                    || Array.from(target.classList)[0] == "category-icon"
+                    || Array.from(target.classList)[0] == "category-title"
+                    || Array.from(target.classList)[0] == "category-content"
+                    || Array.from(target.classList)[0] == "rango-arrow-right"
                 ) {
                     let parentItem = target.closest('li');
 
@@ -131,7 +131,7 @@ $(document).ready(function () {
 
             show: function (element) {
                 element.show();
-                element.mouseleave(({target}) => {
+                element.mouseleave(({ target }) => {
                     $(target.closest('.sidebar')).hide();
                 });
             },
@@ -140,23 +140,23 @@ $(document).ready(function () {
                 element.hide();
             },
 
-            toggleButtonDisability ({event, actionType}) {
+            toggleButtonDisability({ event, actionType }) {
                 let button = event.target.querySelector('button[type=submit]');
 
                 button ? button.disabled = actionType : '';
             },
 
             onSubmit: function (event) {
-                this.toggleButtonDisability({event, actionType: true});
+                this.toggleButtonDisability({ event, actionType: true });
 
-                if(typeof tinyMCE !== 'undefined')
+                if (typeof tinyMCE !== 'undefined')
                     tinyMCE.triggerSave();
 
                 this.$validator.validateAll().then(result => {
                     if (result) {
                         event.target.submit();
                     } else {
-                        this.toggleButtonDisability({event, actionType: false});
+                        this.toggleButtonDisability({ event, actionType: false });
 
                         eventBus.$emit('onFormError')
                     }
@@ -164,7 +164,7 @@ $(document).ready(function () {
             },
 
             isMobile: function () {
-                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i|/mobi/i.test(navigator.userAgent)) {
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i | /mobi/i.test(navigator.userAgent)) {
                     if (this.isMaxWidthCrossInLandScape()) {
                         return false;
                     }
@@ -174,7 +174,7 @@ $(document).ready(function () {
                 }
             },
 
-            isMaxWidthCrossInLandScape: function() {
+            isMaxWidthCrossInLandScape: function () {
                 return window.innerWidth > 900;
             },
 
@@ -259,23 +259,23 @@ $(document).ready(function () {
 
         methods: {
             onSubmit: function (event) {
-                this.toggleButtonDisability({event, actionType: true});
+                this.toggleButtonDisability({ event, actionType: true });
 
-                if(typeof tinyMCE !== 'undefined')
+                if (typeof tinyMCE !== 'undefined')
                     tinyMCE.triggerSave();
 
                 this.$validator.validateAll().then(result => {
                     if (result) {
                         event.target.submit();
                     } else {
-                        this.toggleButtonDisability({event, actionType: false});
+                        this.toggleButtonDisability({ event, actionType: false });
 
                         eventBus.$emit('onFormError')
                     }
                 });
             },
 
-            toggleButtonDisable (value) {
+            toggleButtonDisable(value) {
                 var buttons = document.getElementsByTagName("button");
 
                 for (var i = 0; i < buttons.length; i++) {
@@ -286,8 +286,8 @@ $(document).ready(function () {
             addServerErrors: function (scope = null) {
                 for (var key in serverErrors) {
                     var inputNames = [];
-                    key.split('.').forEach(function(chunk, index) {
-                        if(index) {
+                    key.split('.').forEach(function (chunk, index) {
+                        if (index) {
                             inputNames.push('[' + chunk + ']')
                         } else {
                             inputNames.push(chunk)
@@ -323,13 +323,13 @@ $(document).ready(function () {
 
             loadCategories: function () {
                 this.$http.get(`${this.baseUrl}/categories`)
-                .then(response => {
-                    this.sharedRootCategories = response.data.categories;
-                    $(`<style type='text/css'> .sub-categories{ min-height:${response.data.categories.length * 30}px;} </style>`).appendTo("head");
-                })
-                .catch(error => {
-                    console.log('failed to load categories');
-                })
+                    .then(response => {
+                        this.sharedRootCategories = response.data.categories;
+                        $(`<style type='text/css'> .sub-categories{ min-height:${response.data.categories.length * 30}px;} </style>`).appendTo("head");
+                    })
+                    .catch(error => {
+                        console.log('failed to load categories');
+                    })
             },
 
             addIntersectionObserver: function () {
@@ -365,7 +365,7 @@ $(document).ready(function () {
     Vue.component('vnode-injector', {
         functional: true,
         props: ['nodes'],
-        render(h, {props}) {
+        render(h, { props }) {
             return props.nodes;
         }
     });
