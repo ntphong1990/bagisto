@@ -1247,7 +1247,7 @@ $(document).ready(function () {
                 'sharedRootCategories': [],
                 'responsiveSidebarTemplate': '',
                 'responsiveSidebarKey': Math.random(),
-                'baseUrl': document.querySelector("script[src$='velocity.js']").getAttribute('baseUrl')
+                'baseUrl': location.protocol + "//" + location.host
             };
         },
 
@@ -41832,6 +41832,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['list', 'product'],
@@ -41903,7 +41904,7 @@ var render = function() {
                           _c(
                             "div",
                             { staticClass: "product-card__image__badge__text" },
-                            [_vm._v("\n                        product.new ")]
+                            [_vm._v("\n                        new ")]
                           )
                         ]
                       )
@@ -41980,7 +41981,7 @@ var render = function() {
                         _c(
                           "div",
                           { staticClass: "product-card__image__badge__text" },
-                          [_vm._v("\n                    product.new ")]
+                          [_vm._v("\n                    new ")]
                         )
                       ]
                     )
