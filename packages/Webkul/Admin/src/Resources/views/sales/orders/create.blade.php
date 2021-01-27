@@ -138,7 +138,7 @@
                                 <div class="dropdown-list bottom" style="width:100%; display: none;">
                                     <div class="dropdown-container" style="height:50vh">
                                         <ul >
-                                            <li v-for="product in products" class="row ">
+                                            <li v-for="product in products" class="row " style="padding:0px">
 
                                                 <div class="col-12" style="width:100%" v-if="product.url_key.indexOf(search_key) > -1">
                                                     <div class="row">
@@ -537,6 +537,7 @@
 
             },
             addItem(variant, product) {
+                this.search_key = "";
                 let item = {};
                 item.product = product;
                 item.product.attribute_family = {
