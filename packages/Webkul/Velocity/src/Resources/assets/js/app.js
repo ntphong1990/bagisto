@@ -67,7 +67,7 @@ $(document).ready(function () {
                 'sharedRootCategories': [],
                 'responsiveSidebarTemplate': '',
                 'responsiveSidebarKey': Math.random(),
-                'baseUrl': "https:" + "//" + location.host
+                'baseUrl': location.protocol + "//" + location.host
             }
         },
 
