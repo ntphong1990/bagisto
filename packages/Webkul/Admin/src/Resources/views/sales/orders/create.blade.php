@@ -157,35 +157,33 @@
                                                     </div>
                                                     <ul class="list-group" v-if="product.variants.length > 0">
                                                         <li v-for="variant in product.variants" class="list-group-item list-group-item-action product-variant" v-on:click="addItem(variant,product)">
-                                                            <div class="row">    
-                                                                <div>
+                                                           
                                                                     <a class="color_green pull-left" style="pointer-events:none">
                                                                         <span  v-html="variant.color_label + ' / ' + variant.size_label"></span>
                                                                     </a>
                                                                     <div class="pull-right" style="pointer-events:none">
 
-                                                                        <span  v-html="variant.formated_price"></span>
+                                                                        <span  v-html="variant.formated_price"></span> - <span style="color:#0041FF" v-html="'còn lại ' + variant.stock"></span>
                                                                     </div>
-                                                                </div>    
-                                                                <div style="color:#0041FF" v-html="'còn lại ' + variant.stock"></div>
-                                                            </div>
+                                                               
+                                                               
+                                                           
                                                         </li>
 
                                                     </ul>
                                                     <ul v-else> 
                                                     <li class="list-group-item list-group-item-action product-variant" v-on:click="addItem(null,product)">
-                                                        <div class="row">
-                                                            <div>
+                                                       
                                                                 <a class="color_green pull-left" style="pointer-events:none">
                                                                     <span  v-html="product.color_label + ' / ' + product.size_label"></span>
                                                                 </a>
                                                                 <div class="pull-right" style="pointer-events:none">
 
-                                                                    <span  v-html="product.formated_price"></span>
+                                                                    <span  v-html="product.formated_price"></span> - <span style="color:#0041FF" v-html="'còn lại ' + product.stock"></span>
                                                                 </div>
-                                                            </div>
-                                                            <div style="color:#0041FF" v-html="'còn lại ' + product.stock"></div>
-                                                        </div>   
+                                                           
+                                                            
+                                                        
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -612,7 +610,7 @@
                 if (variant != null) {
                     item.children = [variant];
                 }
-                console.log(product);
+                
                 if (product.type == "configurable") {
 
                     item.additional.quantity = "1";
@@ -635,6 +633,7 @@
                 this.order.base_sub_total = 0;
                 this.order.total_item_count = 0;
                 this.order.total_qty_ordered = 0;
+                this.order.base_shipping_amount = this.order.shipping_amount;
                 this.order.items.forEach(element => {
                     element.total = element.price * element.qty_ordered;
                     this.order.sub_total += element.price * element.qty_ordered

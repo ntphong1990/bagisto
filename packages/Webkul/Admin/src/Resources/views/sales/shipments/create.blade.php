@@ -239,7 +239,7 @@
                 <option value="">{{ __('admin::app.sales.shipments.select-source') }}</option>
 
                 @foreach ($order->channel->inventory_sources as $key => $inventorySource)
-                    <option value="{{ $inventorySource->id }}">{{ $inventorySource->name }}</option>
+                    <option value="{{ $inventorySource->id }}" >{{ $inventorySource->name }}</option>
                 @endforeach
 
             </select>
@@ -354,7 +354,7 @@
 
             data: function() {
                 return {
-                    source: ""
+                    source: "1"
                 }
             }
         });
