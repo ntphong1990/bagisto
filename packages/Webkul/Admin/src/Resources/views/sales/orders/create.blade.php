@@ -67,19 +67,19 @@
                             <div class="section-content" >
                             <div class="row">
                                 <div class="control-group" :class="[errors.has('name') ? 'has-error' : '']">
-                                    <label for="name" class="required">Name</label>
-                                    <input type="text" id="name" class="control" placeholder="Enter customer name" v-validate="'required'" name="name" v-model="order.customer_first_name">
+                                    <label for="name" class="required">Tên khách</label>
+                                    <input type="text" id="name" class="control" placeholder="Nhập tên khách" v-validate="'required'" name="name" v-model="order.customer_first_name">
                                     <span class="control-error" v-if="errors.has('name')">@{{ errors.first('name') }}</span>
                                 </div>
                                 <div class="control-group" :class="[errors.has('phone') ? 'has-error' : '']">
-                                    <label for="phone" class="required">Phone</label>
-                                    <input type="text" id="phone" class="control" placeholder="Enter customer phone number" v-validate="'required'" name="phone" v-model="order.billing_address.phone">
+                                    <label for="phone" class="required">SDT</label>
+                                    <input type="text" id="phone" class="control" placeholder="Nhập số điện thoại" v-validate="'required'" name="phone" v-model="order.billing_address.phone">
                                     <span class="control-error" v-if="errors.has('name')">@{{ errors.first('phone') }}</span>
                                 </div>
                                 </div>
                                 <div class="control-group" :class="[errors.has('address') ? 'has-error' : '']">
-                                    <label for="phone" >Address</label>
-                                    <input type="text" class="control" placeholder="Enter address" name="address"  v-model="order.billing_address.address1">
+                                    <label for="phone" >Địa chỉ</label>
+                                    <input type="text" class="control" placeholder="Nhập địa chỉ nhận hàng"  v-model="order.billing_address.address1">
                                     <span class="control-error" v-if="errors.has('address')">@{{ errors.first('address') }}</span>
                                 </div>
                                 <!-- <div class="row">
