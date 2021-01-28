@@ -49,7 +49,7 @@
                                 @if ($toDisplay)
                                     <a
                                     @if ($action['method'] == 'GET')
-                                        href="{{ route($action['route'], $record->{$action['index'] ?? $index}) }}"
+                                        href="{{ route($action['route'], $record->{$action['index'] ?? $index},false) }}"
                                     @endif
 
                                     @if ($action['method'] != 'GET')
@@ -57,7 +57,7 @@
                                     @endif
 
                                     data-method="{{ $action['method'] }}"
-                                    data-action="{{ route($action['route'], $record->{$index}) }}"
+                                    data-action="{{ route($action['route'], $record->{$index},false) }}"
                                     data-token="{{ csrf_token() }}"
 
                                     @if (isset($action['target']))
