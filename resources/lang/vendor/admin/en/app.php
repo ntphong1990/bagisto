@@ -331,7 +331,7 @@ return [
             'order-status-pending' => 'Chờ xử lý',
             'order-status-pending-payment' => 'Chờ thanh toán',
             'order-status-processing' => 'Đang xử lý',
-            'order-status-success' => 'Hoàn thành',
+            'order-status-success' => 'Đã hoàn thành',
             'channel' => 'Kênh',
             'customer-name' => 'Tên khách',
             'email' => 'Email',
