@@ -221,7 +221,7 @@
                                             </div>
 
                                             <div class="info">
-                                                {{ __('admin::app.dashboard.sale-count', ['count' => $item->total_qty_invoiced]) }}
+                                                {{ __('admin::app.dashboard.sale-count', ['count' => $item->total_qty_ordered]) }}
                                             </div>
                                         </div>
 

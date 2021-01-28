@@ -20,7 +20,7 @@
                     </span>
                 </div>
                 <a href="/admin/sales/orders/create" class="btn btn-lg btn-primary">
-                    Add Order
+                    Tạo mới
                 </a>
                 
             </div>

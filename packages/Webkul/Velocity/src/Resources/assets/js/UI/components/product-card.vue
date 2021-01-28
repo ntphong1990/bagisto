@@ -10,13 +10,14 @@
                         :alt="product.name">
                     <div class="product-card__image__badge product-card__image__badge--small" v-if="product.new">
                         <div class="product-card__image__badge__text">
-                            product.new </div>
+                            new </div>
                     </div>
                 </div>
                 <div class="product-card__content">
                     <div class="product-card__content__price">
                         <span class="from">From</span> <span class="woocommerce-Price-amount amount"><span
-                                class="woocommerce-Price-currencySymbol">$</span>{{product.priceHTML}}</span> </div>
+                                class="woocommerce-Price-currencySymbol">$</span>{{product.priceHTML}}</span>
+                    </div>
                     <div class="product-card__content__title">{{product.name}}</div>
                     <div class="product-card__content__excerpt">{{product.shortDescription}}</div>
                 </div>
@@ -32,7 +33,7 @@
                 <img class="product-card__image__img" :src="product.image || product.product_image" :alt="product.name">
                 <div class="product-card__image__badge product-card__image__badge--small" v-if="product.new">
                     <div class="product-card__image__badge__text">
-                        product.new </div>
+                        new </div>
                 </div>
             </div>
             <div class="product-card__content">

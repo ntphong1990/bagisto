@@ -30,12 +30,20 @@
     </div>
    
 
-    <div class="page-action"><button type="submit" v-on:click="submit()" class="btn btn-lg btn-primary" style="width:120px" :disabled="loading">
-            <span v-if="!loading">Save Order</span>
+    <div class="page-action">
+        <button type="submit" v-on:click="submit()" class="btn btn-lg btn-primary" style="width:120px" :disabled="loading">
+            <span v-if="!loading">Tạo đơn</span>
             <div v-if="loading" class="spinner-border m-5">
   
             </div>
-        </button></div>
+        </button>
+        <!-- <button type="submit" v-on:click="submit()" class="btn btn-lg btn-primary" style="width:120px" :disabled="loading">
+            <span v-if="!loading">Tạo đơn</span>
+            <div v-if="loading" class="spinner-border m-5">
+  
+            </div>
+        </button> -->
+    </div>
 
 </div>
 
