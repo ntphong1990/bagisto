@@ -45,6 +45,7 @@ class Product extends JsonResource
             'base_image'             => $this->productImageHelper->getProductBaseImage($product),
             'variants'               => Self::collection($this->variants),
             // 'in_stock'               => $product->haveSufficientQuantity(1),
+            'stock' => $product->totalQuantity(),
             // $this->mergeWhen($product->getTypeInstance()->isComposite(), [
             //     'super_attributes' => Attribute::collection($product->super_attributes),
             // ]),

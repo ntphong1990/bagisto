@@ -149,25 +149,35 @@
                                                     </div>
                                                     <ul class="list-group" v-if="product.variants.length > 0">
                                                         <li v-for="variant in product.variants" class="list-group-item list-group-item-action product-variant" v-on:click="addItem(variant,product)">
-                                                            <a class="color_green pull-left" style="pointer-events:none">
-                                                                <span  v-html="variant.color_label + ' / ' + variant.size_label"></span>
-                                                            </a>
-                                                            <div class="pull-right" style="pointer-events:none">
+                                                            <div class="row">    
+                                                                <div>
+                                                                    <a class="color_green pull-left" style="pointer-events:none">
+                                                                        <span  v-html="variant.color_label + ' / ' + variant.size_label"></span>
+                                                                    </a>
+                                                                    <div class="pull-right" style="pointer-events:none">
 
-                                                                <span  v-html="variant.formated_price"></span>
+                                                                        <span  v-html="variant.formated_price"></span>
+                                                                    </div>
+                                                                </div>    
+                                                                <div style="color:#0041FF" v-html="'còn lại ' + variant.stock"></div>
                                                             </div>
                                                         </li>
 
                                                     </ul>
                                                     <ul v-else> 
                                                     <li class="list-group-item list-group-item-action product-variant" v-on:click="addItem(null,product)">
-                                                            <a class="color_green pull-left" style="pointer-events:none">
-                                                                <span  v-html="product.color_label + ' ' + product.size_label"></span>
-                                                            </a>
-                                                            <div class="pull-right" style="pointer-events:none">
+                                                        <div class="row">
+                                                            <div>
+                                                                <a class="color_green pull-left" style="pointer-events:none">
+                                                                    <span  v-html="product.color_label + ' ' + product.size_label"></span>
+                                                                </a>
+                                                                <div class="pull-right" style="pointer-events:none">
 
-                                                                <span  v-html="product.formated_price"></span>
+                                                                    <span  v-html="product.formated_price"></span>
+                                                                </div>
                                                             </div>
+                                                            <div style="color:#0041FF" v-html="'còn lại ' + product.stock"></div>
+                                                        </div>   
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -249,7 +259,7 @@
                                        
                                     </td>
                                     <td>-</td>
-                                    <td>0</td>
+                                    <td><input @change="calculate()" v-model="order.base_discount_amount" type="number"/></td>
                                 </tr>
                                 
                                
@@ -360,7 +370,14 @@
 
     </tabs>
 </div>
+    <!-- <modal id="open_modal" :is-open="open_modal">
+        <h3 slot="header">Coupon</h3>
+        <div slot="body">
 
+        <input style="width:100%" autocomplete="off" type="text" class="control" v-model="coupon_code" placeholder="Enter coupon" >
+        <button class="btn btn-primary">Apply</button>
+        </div>
+    </modal> -->
 </div>
 </script>
 <style>
@@ -416,6 +433,7 @@
             return {
                 products: [],
                 search_key:"",
+                open_modal:true,
                 loading:false,
                 order: {
                     "customer_id": null,
@@ -614,7 +632,8 @@
                     this.order.sub_total += element.price * element.qty_ordered
                 });
                 this.order.base_sub_total = this.order.sub_total;
-                this.order.grand_total = this.order.sub_total + parseInt(this.order.shipping_amount);
+                this.order.discount_amount = this.order.base_discount_amount;
+                this.order.grand_total = this.order.sub_total + parseInt(this.order.shipping_amount) - this.order.discount_amount;
                 this.order.base_grand_total = this.order.grand_total;
             },
 
