@@ -134,7 +134,7 @@ return [
         'customer-with-most-sales' => 'Top Khách hàng',
         'order-count' => ':count đơn hàng',
         'revenue' => 'Revenue :total',
-        'stock-threshold' => 'Tồn kho',
+        'stock-threshold' => 'Tồn kho thấp',
         'qty-left' => ':qty còn lại'
     ],
 
