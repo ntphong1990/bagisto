@@ -205,7 +205,7 @@ class DashboardController extends Controller
                     ->addSelect('product_inventories.product_id')
                     ->groupBy('product_id')
                     ->orderBy('total_qty', 'ASC')
-                    ->limit(10)
+                    ->limit(15)
                     ->get();
     }
 
