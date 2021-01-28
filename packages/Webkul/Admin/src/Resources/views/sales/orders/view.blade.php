@@ -476,12 +476,12 @@
                                         <td>{{ core()->formatBasePrice($order->base_grand_total_refunded) }}</td>
                                     </tr>
 
-                                    <!-- <tr class="bold">
+                                    <tr class="bold">
                                         <td>{{ __('admin::app.sales.orders.total-due') }}</td>
                                         <td>-</td>
                                         
                                         <td>{{ core()->formatBasePrice($order->base_total_due) }}</td>
-                                    </tr> -->
+                                    </tr>
                                 </table>
                             </div>
                         </div>

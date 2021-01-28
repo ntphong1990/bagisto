@@ -369,7 +369,7 @@ return [
             'grand-total' => 'Tổng cộng',
             'total-paid' => 'Thanh toán',
             'total-refunded' => 'Hoàn trả',
-            'total-due' => 'Total Due',
+            'total-due' => 'Còn lại',
             'cancel-confirm-msg' => 'Are you sure you want to cancel this order ?',
             'refund-btn-title' => 'Hoàn trả',
             'refunds' => 'Hoàn trả',
