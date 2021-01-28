@@ -8,7 +8,7 @@ use Webkul\Sales\Repositories\OrderRepository;
 use Webkul\Sales\Repositories\OrderItemRepository;
 use Webkul\Customer\Repositories\CustomerRepository;
 use Webkul\Product\Repositories\ProductInventoryRepository;
-
+use Log;
 class DashboardController extends Controller
 {
     /**
@@ -154,7 +154,7 @@ class DashboardController extends Controller
             'customer_with_most_sales' => $this->getCustomerWithMostSales(),
             'stock_threshold'          => $this->getStockThreshold(),
         ];
-
+       
         foreach (core()->getTimeInterval($this->startDate, $this->endDate) as $interval) {
             $statistics['sale_graph']['label'][] = $interval['start']->format('d M');
 
@@ -205,7 +205,7 @@ class DashboardController extends Controller
                     ->addSelect('product_inventories.product_id')
                     ->groupBy('product_id')
                     ->orderBy('total_qty', 'ASC')
-                    ->limit(5)
+                    ->limit(10)
                     ->get();
     }
 
