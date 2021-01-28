@@ -54,6 +54,7 @@ class OrderItemRepository extends Repository
         unset($data['color_label']);
         unset($data['size_label']);
         unset($data['is_saved']);
+        unset($data['stock']);
         
         
         Log::info(json_encode($data));
