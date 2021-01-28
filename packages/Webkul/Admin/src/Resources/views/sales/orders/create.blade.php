@@ -169,7 +169,7 @@
                                                         <div class="row">
                                                             <div>
                                                                 <a class="color_green pull-left" style="pointer-events:none">
-                                                                    <span  v-html="product.color_label + ' ' + product.size_label"></span>
+                                                                    <span  v-html="product.color_label + ' / ' + product.size_label"></span>
                                                                 </a>
                                                                 <div class="pull-right" style="pointer-events:none">
 
