@@ -317,7 +317,7 @@ return [
             'view-title' => 'Đơn hàng #:order_id',
             'cancel-btn-title' => 'Huỷ',
             'shipment-btn-title' => 'Xuất kho',
-            'invoice-btn-title' => 'Thu tiền',
+            'invoice-btn-title' => 'Thanh toán',
             'info' => 'Thông tin',
             'invoices' => 'Hoá đơn',
             'shipments' => 'Vận chuyển',
