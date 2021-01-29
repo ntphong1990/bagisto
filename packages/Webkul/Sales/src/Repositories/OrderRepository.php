@@ -13,6 +13,7 @@ use Webkul\Shop\Generators\OrderNumberIdSequencer;
 use Illuminate\Support\Facades\Log;
 use Webkul\API\Http\Resources\Core\Channel;
 
+
 class OrderRepository extends Repository
 {
     /**
@@ -21,7 +22,6 @@ class OrderRepository extends Repository
      * @var \Webkul\Sales\Repositories\OrderItemRepository
      */
     protected $orderItemRepository;
-
     /**
      * DownloadableLinkPurchasedRepository object
      *
@@ -44,6 +44,7 @@ class OrderRepository extends Repository
         $this->orderItemRepository = $orderItemRepository;
 
         $this->downloadableLinkPurchasedRepository = $downloadableLinkPurchasedRepository;
+
 
         parent::__construct($app);
     }
@@ -101,13 +102,14 @@ class OrderRepository extends Repository
             }
 
             $order->addresses()->create($data['billing_address']);
+            $da = ['invoice' => ['items' => []]];
             foreach ($data['items'] as $item) {
                 Event::dispatch('checkout.order.orderitem.save.before', $data);
                 $item['product'] = \Webkul\Product\Models\Product::find($item['product']['id']);
                
 
                 $orderItem = $this->orderItemRepository->create(array_merge($item, ['order_id' => $order->id]));
-
+                $da['invoice']['items'][$orderItem->id] = $item['qty_ordered'];
                 if (isset($item['children']) && $item['children']) {
                     foreach ($item['children'] as $child) {
                         $this->orderItemRepository->create(array_merge($child, ['order_id' => $order->id, 'parent_id' => $orderItem->id]));
@@ -120,7 +122,9 @@ class OrderRepository extends Repository
 
                 Event::dispatch('checkout.order.orderitem.save.after', $data);
             }
-
+           
+           
+           
             Event::dispatch('checkout.order.save.after', $order);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -130,7 +134,7 @@ class OrderRepository extends Repository
 
         DB::commit();
 
-        return $order;
+        return ['order' => $order, 'invoice' => $da];
     }
 
     /**

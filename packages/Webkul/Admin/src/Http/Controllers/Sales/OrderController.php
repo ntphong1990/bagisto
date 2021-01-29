@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Event;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Sales\Repositories\OrderRepository;
 use \Webkul\Sales\Repositories\OrderCommentRepository;
-
+use Webkul\Sales\Repositories\InvoiceRepository;
+use Log;
 class OrderController extends Controller
 {
     /**
@@ -29,7 +30,7 @@ class OrderController extends Controller
      * @var \Webkul\Sales\Repositories\OrderCommentRepository
      */
     protected $orderCommentRepository;
-
+    protected $invoiceRepository;
     /**
      * Create a new controller instance.
      *
@@ -39,7 +40,8 @@ class OrderController extends Controller
      */
     public function __construct(
         OrderRepository $orderRepository,
-        OrderCommentRepository $orderCommentRepository
+        OrderCommentRepository $orderCommentRepository,
+        InvoiceRepository $invoiceRepository
     ) {
         $this->middleware('admin');
 
@@ -48,6 +50,8 @@ class OrderController extends Controller
         $this->orderRepository = $orderRepository;
 
         $this->orderCommentRepository = $orderCommentRepository;
+
+        $this->invoiceRepository = $invoiceRepository;
     }
 
     /**
@@ -82,7 +86,10 @@ class OrderController extends Controller
     public function saveOrder()
     {
         $data = request()->all();
-        return $this->orderRepository->create($data);
+        $order = $this->orderRepository->create($data);
+        Log::info($order['invoice']);
+        $this->invoiceRepository->create(array_merge($order['invoice'], ['order_id' => $order['order']->id]));
+        return $order['order'];
         //return 'ok';
     }
 
