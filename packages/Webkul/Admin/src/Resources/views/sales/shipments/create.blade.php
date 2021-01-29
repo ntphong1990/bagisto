@@ -27,7 +27,84 @@
 
             <div class="page-content">
                 <div class="sale-container">
+                    <accordian :title="'{{ __('admin::app.sales.orders.products-ordered') }}'" :active="true">
+                        <div slot="body">
 
+                            <order-item-list></order-item-list>
+
+                        </div>
+                    </accordian>
+                    <accordian :title="'{{ __('admin::app.sales.orders.payment-and-shipping') }}'" :active="true">
+                        <div slot="body">
+
+                            
+
+                            <div class="sale-section">
+                                <div class="secton-title">
+                                    <span>{{ __('admin::app.sales.orders.shipping-info') }}</span>
+                                </div>
+
+                                <div class="section-content">
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.shipping-method') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ $order->shipping_title }}
+                                        </span>
+                                    </div>
+
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.shipping-price') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ core()->formatBasePrice($order->base_shipping_amount) }}
+                                        </span>
+                                    </div>
+
+                                    <div class="control-group" style="margin-top: 40px">
+                                        <label for="shipment[carrier_title]">{{ __('admin::app.sales.shipments.carrier-title') }}</label>
+                                        <input type="text" class="control" id="shipment[carrier_title]" name="shipment[carrier_title]"/>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label for="shipment[track_number]">{{ __('admin::app.sales.shipments.tracking-number') }}</label>
+                                        <input type="text" class="control" id="shipment[track_number]" name="shipment[track_number]"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-section">
+                                <div class="secton-title">
+                                    <span>{{ __('admin::app.sales.orders.payment-info') }}</span>
+                                </div>
+
+                                <div class="section-content">
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.payment-method') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ core()->getConfigData('sales.paymentmethods.' . $order->payment->method . '.title') }}
+                                        </span>
+                                    </div>
+
+                                    <div class="row">
+                                        <span class="title">
+                                            {{ __('admin::app.sales.orders.currency') }}
+                                        </span>
+
+                                        <span class="value">
+                                            {{ $order->order_currency_code }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </accordian>
                     <accordian :title="'{{ __('admin::app.sales.orders.order-and-account') }}'" :active="true">
                         <div slot="body">
 
@@ -142,84 +219,9 @@
                         </div>
                     </accordian>
 
-                    <accordian :title="'{{ __('admin::app.sales.orders.payment-and-shipping') }}'" :active="true">
-                        <div slot="body">
+                    
 
-                            <div class="sale-section">
-                                <div class="secton-title">
-                                    <span>{{ __('admin::app.sales.orders.payment-info') }}</span>
-                                </div>
-
-                                <div class="section-content">
-                                    <div class="row">
-                                        <span class="title">
-                                            {{ __('admin::app.sales.orders.payment-method') }}
-                                        </span>
-
-                                        <span class="value">
-                                            {{ core()->getConfigData('sales.paymentmethods.' . $order->payment->method . '.title') }}
-                                        </span>
-                                    </div>
-
-                                    <div class="row">
-                                        <span class="title">
-                                            {{ __('admin::app.sales.orders.currency') }}
-                                        </span>
-
-                                        <span class="value">
-                                            {{ $order->order_currency_code }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="sale-section">
-                                <div class="secton-title">
-                                    <span>{{ __('admin::app.sales.orders.shipping-info') }}</span>
-                                </div>
-
-                                <div class="section-content">
-                                    <div class="row">
-                                        <span class="title">
-                                            {{ __('admin::app.sales.orders.shipping-method') }}
-                                        </span>
-
-                                        <span class="value">
-                                            {{ $order->shipping_title }}
-                                        </span>
-                                    </div>
-
-                                    <div class="row">
-                                        <span class="title">
-                                            {{ __('admin::app.sales.orders.shipping-price') }}
-                                        </span>
-
-                                        <span class="value">
-                                            {{ core()->formatBasePrice($order->base_shipping_amount) }}
-                                        </span>
-                                    </div>
-
-                                    <div class="control-group" style="margin-top: 40px">
-                                        <label for="shipment[carrier_title]">{{ __('admin::app.sales.shipments.carrier-title') }}</label>
-                                        <input type="text" class="control" id="shipment[carrier_title]" name="shipment[carrier_title]"/>
-                                    </div>
-
-                                    <div class="control-group">
-                                        <label for="shipment[track_number]">{{ __('admin::app.sales.shipments.tracking-number') }}</label>
-                                        <input type="text" class="control" id="shipment[track_number]" name="shipment[track_number]"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </accordian>
-
-                    <accordian :title="'{{ __('admin::app.sales.orders.products-ordered') }}'" :active="true">
-                        <div slot="body">
-
-                            <order-item-list></order-item-list>
-
-                        </div>
-                    </accordian>
+                    
 
                 </div>
             </div>

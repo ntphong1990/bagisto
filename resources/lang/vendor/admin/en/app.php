@@ -421,7 +421,7 @@ return [
             'qty-invoiced' => 'SL Thanh toán',
             'qty-to-ship' => 'SL Xuất',
             'available-sources' => 'Kho',
-            'source' => 'Source',
+            'source' => 'Kho',
             'select-source' => 'Please Select Source',
             'qty-available' => 'Tồn kho',
             'inventory-source' => 'Inventory Source',
