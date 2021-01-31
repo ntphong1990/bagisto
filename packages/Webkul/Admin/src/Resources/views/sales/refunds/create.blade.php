@@ -416,7 +416,7 @@
                 updateQty: function() {
                     var this_this = this;
 
-                    this.$http.post("{{ route('admin.sales.refunds.update_qty', $order->id) }}", this.refund.items)
+                    this.$http.post("{{ route('admin.sales.refunds.update_qty', $order->id,false) }}", this.refund.items)
                         .then(function(response) {
                             if (! response.data) {
                                 window.flashMessages = [{
