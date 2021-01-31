@@ -6,7 +6,7 @@ use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Sales\Repositories\OrderRepository;
 use Webkul\Sales\Repositories\OrderItemRepository;
 use Webkul\Sales\Repositories\RefundRepository;
-
+use Log;
 class RefundController extends Controller
 {
     /**
@@ -106,7 +106,7 @@ class RefundController extends Controller
         ]);
 
         $data = request()->all();
-
+        Log::info(json_encode($data));
         if (! $data['refund']['shipping']) {
             $data['refund']['shipping'] = 0;
         }
