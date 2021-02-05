@@ -208,7 +208,7 @@
                                         <!-- <th>{{ __('admin::app.sales.orders.tax-percent') }}</th> -->
                                         <!-- <th>{{ __('admin::app.sales.orders.tax-amount') }}</th> -->
                                        
-                                        <!-- <th>{{ __('admin::app.sales.orders.grand-total') }}</th> -->
+                                        <th></th>
                                     </tr>
                                 </thead>
 
@@ -234,7 +234,9 @@
                                         <td><input v-model="item.qty_ordered" @change="calculate()" class="control" type="number"/></td>
                                         <td v-html="numberFormat(item.total)"></td>
 
-                                        
+                                        <td><a @click="removeItem(item)" style="font-weight: 400;
+    color: #007bff;
+    background-color: transparent;cursor: pointer;">Xoá</a></td>
                                     </tr>
                                 </tbody>   
                             </table>
@@ -643,7 +645,13 @@
                 this.order.grand_total = this.order.sub_total + parseInt(this.order.shipping_amount) - this.order.discount_amount;
                 this.order.base_grand_total = this.order.grand_total;
             },
-
+            removeItem(item){
+                const index = this.order.items.indexOf(item);
+                if (index > -1) {
+                this.order.items.splice(index, 1);
+                }
+                              
+            },
             numberFormat(value) {
 
                 return value.toLocaleString(); // displaying other groupings/separators is possible, look at the docs
