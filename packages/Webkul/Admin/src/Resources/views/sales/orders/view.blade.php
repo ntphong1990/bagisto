@@ -663,7 +663,19 @@
                     <tr>
                         <td colspan="3"
                             style="border-bottom: none;padding:2px;padding-left:10px;font-size:12px;color:black">{{
-                            $item->name }}</td>
+                            $item->name }} - 
+                                                        @if (isset($item->additional['attributes']))
+                                                
+
+                                                    @foreach ($item->additional['attributes'] as $key => $attribute)
+                                                    @if($key == 'color')
+                                                   {{$attribute['option_label']}}
+                                                   @endif
+                                                    @endforeach
+
+                                                
+                            @endif
+                            </td>
                     </tr>
                     <tr style="border-bottom: 1px solid #000;">
 
